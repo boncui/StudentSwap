@@ -1,16 +1,9 @@
 import express, { NextFunction, Request, Response, Router } from 'express';
 import {check, validationResult} from 'express-validator';
+import authenticate from '../middleware/authMiddleware';
 import User from '../models/User';
 
 const router: Router = express.Router();
-
-interface CreateUserRequest extends Request {
-    body: {
-        fullName: string;
-        email: string;
-        phone: string;
-    };
-}
 
 //Validation Middlware for creating users
 const validateCreateUser = [
@@ -63,15 +56,11 @@ const handleValidationErrors = (req: Request, res: Response, next: NextFunction)
 };
 
 
+//==> ROUTES <==
 // Create a user
 router.post('/create', validateCreateUser, handleValidationErrors, async (req: Request, res: Response) => {
     try {
         const { fullName, email, phone }: { fullName: string; email: string; phone: string } = req.body;
-        
-        // Validate Input
-        if (!fullName || !email || !phone) {
-            return res.status(400).json({ error: 'Full Name, Email, and Phone are required.' });
-        }
 
         //check for duplicate users
         const existingUser = await User.findOne({ email });
@@ -96,17 +85,9 @@ router.post('/create', validateCreateUser, handleValidationErrors, async (req: R
 router.get('/:id', validateObjectId, handleValidationErrors, async(req: Request, res: Response) => {
     try {
         const {id} = req.params;
-        
-        // Check if ID is a valid MongoDB ObjectID
-        if (!id.match(/^[0-9a-fA-F]{24}$/)) {
-            return res.status(400).json({ error: 'Invalid ID format.' });
-        }
-        
+      
         //Find User by ID
         const user = await User.findById(id);
-        if (!user) {
-            return res.status(404).json({ error: 'User not found.'});
-        }
 
         res.status(200).json(user);
     } catch (error) {
@@ -139,7 +120,7 @@ router.get('/', async (req: Request, res: Response) => {
 });
 
 //Update User
-router.put('/:id', validateUpdateUser, handleValidationErrors, async (req: Request, res: Response) =>{
+router.put('/:id', authenticate, validateUpdateUser, handleValidationErrors, async (req: Request, res: Response) =>{
     try {
         const {id} = req.params;
         const { fullName, email, phone }: { fullName?: string; email?: string; phone?: string } = req.body;
@@ -168,7 +149,7 @@ router.put('/:id', validateUpdateUser, handleValidationErrors, async (req: Reque
 });
 
 //Delete User
-router.delete('/:id', validateObjectId, handleValidationErrors, async (req: Request, res: Response) => {
+router.delete('/:id', authenticate, validateObjectId, handleValidationErrors, async (req: Request, res: Response) => {
     try {
         const {id} = req.params;
 
