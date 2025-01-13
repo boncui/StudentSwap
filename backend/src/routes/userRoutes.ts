@@ -31,7 +31,7 @@ const validateCreateUser = [
         .withMessage('Invalid phone number format.'),
 ];
 
-//validation for updating users
+//Validation for updating users
 const validateUpdateUser = [
     check('fullName')
         .optional()
@@ -45,6 +45,13 @@ const validateUpdateUser = [
         .optional()
         .isMobilePhone(['en-US', 'en-GB'])
         .withMessage('Invalid phone number format'),
+];
+
+//Validation for valid UserID
+const validateObjectId = [
+    check('id')
+        .custom((value) => /^[0-9a-fA-F]{24}$/.test(value))
+        .withMessage('Invalid ID format.'),
 ];
 
 //Middleware to handle validation errors
@@ -86,7 +93,7 @@ router.post('/create', validateCreateUser, handleValidationErrors, async (req: R
 });
 
 //Get user by ID
-router.get('/:id', async(req: Request, res: Response) => {
+router.get('/:id', validateObjectId, handleValidationErrors, async(req: Request, res: Response) => {
     try {
         const {id} = req.params;
         
@@ -132,7 +139,7 @@ router.get('/', async (req: Request, res: Response) => {
 });
 
 //Update User
-router.put('/:id', async (req: Request, res: Response) =>{
+router.put('/:id', validateUpdateUser, handleValidationErrors, async (req: Request, res: Response) =>{
     try {
         const {id} = req.params;
         const { fullName, email, phone }: { fullName?: string; email?: string; phone?: string } = req.body;
@@ -161,7 +168,7 @@ router.put('/:id', async (req: Request, res: Response) =>{
 });
 
 //Delete User
-router.delete('/:id', async (req: Request, res: Response) => {
+router.delete('/:id', validateObjectId, handleValidationErrors, async (req: Request, res: Response) => {
     try {
         const {id} = req.params;
 
