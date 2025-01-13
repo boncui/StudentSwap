@@ -76,6 +76,7 @@ router.delete('/:id', async (req: Request, res: Response) => {
     try{
         const {id} = req.params;
         const deletedContract = await HousingContract.findByIdAndDelete(id);
+        
         if (!deletedContract){
             res.status(404).json({error: 'Housing Contract not found'});
         }
