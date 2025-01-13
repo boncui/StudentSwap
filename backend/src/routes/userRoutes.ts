@@ -40,6 +40,31 @@ router.post('/create', async (req: Request, res: Response) => {
     }
 });
 
+//Get user by ID
+router.get('/:id', async(req: Request, res: Response) => {
+    try {
+        const {id} = req.params;
+        
+        // Check if ID is a valid MongoDB ObjectID
+        if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+            return res.status(400).json({ error: 'Invalid ID format.' });
+        }
+        
+        //Find User by ID
+        const user = await User.findById(id);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found.'});
+        }
+        
+        res.status(200).json(user);
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(500).json({error: error.message});
+        } else {
+            res.status(500).json({error: 'An unknown error occured on server side.'})
+        }
+    }
+});
 
 // Get all users
 router.get('/', async (req: Request, res: Response) => {
