@@ -3,17 +3,34 @@ import dotenv from 'dotenv'; //dotenv is used for managing enviorment variables
 import userRoutes from './routes/userRoutes';
 import housingRoutes from './routes/housingRoutes';
 import connectDB from './config/db';
+import mongoose from 'mongoose';
+import cors from 'cors';
 
 
 dotenv.config();
 console.log('MONGO_URI:', process.env.MONGO_URI);
 
+//Database connection
 connectDB();
+mongoose.connect(process.env.MONGO_URI!)
+    .then(() => console.log('MongoDB Connected'))
+    .catch((err: unknown) => console.error('MongoDB connection error:', (err as Error).message));
+
+
 
 const app = express();
 const PORT = process.env.PORT || 5001; //PORT 5000 is being used by Mac
 
+const corsOptions = {
+    origin: ['FRONTEND URL'], // REPLACE w Frontend URL
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true, //for cookies and tokens
+}
+
 app.use(express.json());
+app.use(cors(corsOptions));
+
 
 //Base route for testing
 app.get('/', (req: Request, res: Response) => {

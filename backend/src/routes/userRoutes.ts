@@ -1,9 +1,16 @@
 import express, { NextFunction, Request, Response, Router } from 'express';
 import {check, validationResult} from 'express-validator';
 import authenticate from '../middleware/authMiddleware';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 import User from '../models/User';
 
 const router: Router = express.Router();
+
+const universityDomains = [
+    'wustl.edu'
+    // Add more university domains here
+];
 
 //Validation Middlware for creating users
 const validateCreateUser = [
@@ -16,12 +23,30 @@ const validateCreateUser = [
         .notEmpty()
         .withMessage('Email is required.')
         .isEmail()
-        .withMessage('Invalid email format'),
+        .withMessage('Invalid email format')
+        .custom((value) => {
+            const domain = value.split('@')[1]; // Extract domain from email
+            if (!universityDomains.includes(domain)) {
+                throw new Error('Email domain is not allowed. Must belong to an approved university.');
+            }
+            return true; // Validation passed
+        }),
     check('phone')
         .notEmpty()
         .withMessage('Phone number is required')
-        .isMobilePhone(['en-US', 'en-GB'])
+        .isMobilePhone('any') 
         .withMessage('Invalid phone number format.'),
+    check('password')
+        .notEmpty()
+        .withMessage('Password is required')
+        .isLength({min:8})
+        .withMessage('Password must be of length 8')
+        .matches(/[A-Z]/)
+        .withMessage('Password must contain at least one uppercase letter.')
+        .matches(/[a-z]/)
+        .withMessage('Password must contain at least one lowercase letter.')
+        .matches(/[!@#$%^&*(),.?":{}|<>]/)
+        .withMessage('Password must contain at least one special character.')
 ];
 
 //Validation for updating users
@@ -60,7 +85,8 @@ const handleValidationErrors = (req: Request, res: Response, next: NextFunction)
 // Create a user
 router.post('/create', validateCreateUser, handleValidationErrors, async (req: Request, res: Response) => {
     try {
-        const { fullName, email, phone }: { fullName: string; email: string; phone: string } = req.body;
+        
+        const { fullName, email, phone, password }: { fullName: string; email: string; phone: string ; password: string} = req.body;
 
         //check for duplicate users
         const existingUser = await User.findOne({ email });
@@ -69,7 +95,8 @@ router.post('/create', validateCreateUser, handleValidationErrors, async (req: R
         }
 
         // Save user to database
-        const user = new User({ fullName, email, phone });
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user = new User({ fullName, email, phone, password: hashedPassword });
         await user.save();
         res.status(201).json(user);
     } catch (error) {
@@ -77,6 +104,37 @@ router.post('/create', validateCreateUser, handleValidationErrors, async (req: R
             res.status(400).json({ error: error.message });
         } else {
             res.status(400).json({ error: 'An unknown error occurred on the client side.' });
+        }
+    }
+});
+
+router.post('/login', async (req: Request, res: Response) => {
+    try {
+        const { email, password } = req.body;
+
+        //Find the user in the database
+        const user = await User.findOne({email});
+        if (!user) {
+            return res.status(404).json({error: 'User not found'});
+        }
+
+        //Vertify the password
+        const validPassword = await bcrypt.compare(password, user.password);
+        if (!validPassword){
+            return res.status(401).json({error: 'Invalid credentials'});
+        }
+
+        //generate a JWT token
+        const token = jwt.sign({ id: user._id}, process.env.JWT_SECRET!, {
+            expiresIn: '1h', //token will expire in 1 hour
+        });
+
+        res.status(200).json({token});
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(500).json({error: error.message});
+        } else {
+            res.status(500).json({error: 'An unknown error occured during Login.'});
         }
     }
 });
