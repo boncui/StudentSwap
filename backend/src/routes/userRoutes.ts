@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response, Router } from 'express';
-import {check, validationResult} from 'express-validator';
+import {check, validationResult, ValidationError} from 'express-validator';
 import authenticate from '../middleware/authMiddleware';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
@@ -75,9 +75,11 @@ const validateObjectId = [
 //Middleware to handle validation errors
 const handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
-    if (!errors.isEmpty()){
-        return res.status(400).json({errors: errors.array()});
+    if (!errors.isEmpty()) {
+        console.log('Validation Errors:', errors.array());
+        return res.status(400).json({ errors: errors.array() });
     }
+    next();
 };
 
 
@@ -108,6 +110,7 @@ router.post('/create', validateCreateUser, handleValidationErrors, async (req: R
     }
 });
 
+//LOGIN Functionality
 router.post('/login', async (req: Request, res: Response) => {
     try {
         const { email, password } = req.body;
@@ -205,6 +208,20 @@ router.put('/:id', authenticate, validateUpdateUser, handleValidationErrors, asy
         }
     }
 });
+
+//LOGOUT Functionality
+router.post('/logout', authenticate, (req: Request, res: Response) =>{
+    try {
+        //perform any cleanup / checkups <ADD LATER>
+        res.status(200).json({message: 'Logout Successfull'});
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(500).json({ error: error.message});
+        } else {
+            res.status(500).json({error: 'Unknown error occured when logging out'});
+        }
+    }
+})
 
 //Delete User
 router.delete('/:id', authenticate, validateObjectId, handleValidationErrors, async (req: Request, res: Response) => {
