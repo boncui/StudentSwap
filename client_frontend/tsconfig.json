@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+      "target": "ES6",                       // ES6 JavaScript output
+      "module": "esnext",                       // Module system used
+      "strict": true,                        // Enable all strict type-checking options
+      "esModuleInterop": true,               // Enable ES module interoperability
+      "skipLibCheck": true,                  // Skip type checking of declaration files
+      "forceConsistentCasingInFileNames": true, // Enforce consistent casing in imports
+      "jsx": "react-jsx",                    // Use the React JSX transform
+      "moduleResolution": "node",            // Resolve modules like Node.js
+      "resolveJsonModule": true,             // Allow importing JSON files
+      "outDir": "./dist"                     // Output directory for compiled files
+    },
+    "include": ["src"],                      // Include all source files
+    "exclude": ["node_modules", "dist"],     // Exclude node_modules and dist folder
+    "typeRoots": ["./node_modules/@types"]   // Explicitly specify type declaration folders
+  }
+  
