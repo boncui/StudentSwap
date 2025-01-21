@@ -1,2 +1,29 @@
+# Dependencies
+node_modules/
+ 
+# Build outputs
+build/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
 .env
+
+# IDE files
+.vscode/
+.idea/
+
+# Miscellaneous
+.DS_Store
+
+# Tailwind and other tool caches
+.postcssrc.js
+.tailwind.config.js
+
+# CodeGPT configuration
 .codegpt
+
+# END OF .gitignore
