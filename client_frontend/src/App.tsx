@@ -3,7 +3,7 @@ import React from 'react';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Landing from './pages/Landing';
-// import Dashboard from './pages/Dashboard';
+import Dashboard from './pages/Dashboard';
 // import HousingContracts from './pages/HousingContracts';
 
 const App: React.FC = () => {
@@ -13,7 +13,7 @@ const App: React.FC = () => {
         <Route path ="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<div>Dashboard Page</div>} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </Router>
   );

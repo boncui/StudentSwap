@@ -1,18 +1,43 @@
 {
-    "compilerOptions": {
-      "target": "ES6",                       // ES6 JavaScript output
-      "module": "esnext",                       // Module system used
-      "strict": true,                        // Enable all strict type-checking options
-      "esModuleInterop": true,               // Enable ES module interoperability
-      "skipLibCheck": true,                  // Skip type checking of declaration files
-      "forceConsistentCasingInFileNames": true, // Enforce consistent casing in imports
-      "jsx": "react-jsx",                    // Use the React JSX transform
-      "moduleResolution": "node",            // Resolve modules like Node.js
-      "resolveJsonModule": true,             // Allow importing JSON files
-      "outDir": "./dist"                     // Output directory for compiled files
+  "compilerOptions": {
+    // Target ECMAScript standard
+    "target": "ES6", 
+    // Specify the module system
+    "module": "esnext", 
+    // Strict type-checking options
+    "strict": true, 
+    // Allow importing ES modules and CommonJS modules seamlessly
+    "esModuleInterop": true, 
+    // Skip type-checking of all declaration files
+    "skipLibCheck": true, 
+    // Enforce consistent casing for imports
+    "forceConsistentCasingInFileNames": true, 
+    // Use the React JSX runtime for JSX transformations
+    "jsx": "react-jsx", 
+    // Resolve modules in the Node.js style
+    "moduleResolution": "node", 
+    // Allow JSON imports
+    "resolveJsonModule": true, 
+    // Output directory for compiled files
+    "outDir": "./dist", 
+    // Specify baseUrl for module resolution (useful for absolute imports)
+    "baseUrl": "./", 
+    // Specify paths for module resolution (if needed)
+    "paths": {
+      "@components/*": ["src/components/*"],
+      "@pages/*": ["src/pages/*"],
+      "@services/*": ["src/services/*"],
+      "@styles/*": ["src/styles/*"]
     },
-    "include": ["src"],                      // Include all source files
-    "exclude": ["node_modules", "dist"],     // Exclude node_modules and dist folder
-    "typeRoots": ["./node_modules/@types"]   // Explicitly specify type declaration folders
-  }
-  
+    // Enable source maps for debugging in development
+    "sourceMap": true, 
+    // Enable experimental decorators (if needed)
+    "experimentalDecorators": true
+  },
+  // Include the source files to compile
+  "include": ["src"], 
+  // Exclude folders and files from the compilation process
+  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.test.tsx"], 
+  // Specify locations of type definitions
+  "typeRoots": ["./node_modules/@types"] 
+}
