@@ -13,7 +13,7 @@ const NavBar:React.FC = () => {
             </div>
 
             {/*Right Side Links*/}
-            <div className='flex spave-x-4'>
+            <div className='flex space-x-4'>
                 <Link to='list-with-us' className="hover:underline">List with us</Link>
                 <Link to='account' className="hover:underline">Account</Link>
             </div>
