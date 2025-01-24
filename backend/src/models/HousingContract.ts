@@ -10,7 +10,8 @@ interface IHousingContract extends Document {
     managerPhone: string;
     moveInFee: number;
     moveOutFee: number;
-    rooms: 'studio' | 1 | 2 | 3 | 4 | 5 | 6;
+    rooms: 'studio' | 1 | 2 | 3 | 4 | 5 | 6 | 7;
+    bath: 'shower' | 1 | 2 | 3 | 4 | 5 | 6 | 7;
     title: string; // Required title for the listing
     postedBy: mongoose.Types.ObjectId;
     photos?: string[];
@@ -31,7 +32,6 @@ interface IHousingContract extends Document {
         fridge?: boolean;
         freezer?: boolean;
         squareFootage?: number;
-        bath?: boolean;
     };
 }
 
@@ -49,7 +49,12 @@ const HousingContractSchema: Schema = new Schema(
         rooms: {
             type: Schema.Types.Mixed, // Allows both numbers and strings
             required: true,
-            enum: ['studio', 1, 2, 3, 4, 5, 6],
+            enum: ['studio', 1, 2, 3, 4, 5, 6, 7],
+        },
+        baths: {
+            type: Schema.Types.Mixed, // Allows both numbers and strings
+            required: true,
+            enum: ['shower', 1, 2, 3, 4, 5, 6, 7],
         },
         title: {type: String, required:true},
         postedBy: {type: Schema.Types.ObjectId, ref: 'User', required: true},
@@ -71,7 +76,6 @@ const HousingContractSchema: Schema = new Schema(
             fridge: { type: Boolean },
             freezer: { type: Boolean },
             squareFootage: { type: Number },
-            bath: { type: Boolean },
         },
     },
     {

@@ -23,9 +23,9 @@ router.post('/create', async (req: Request, res: Response) => {
 });
 
 //Get all the Housing Contracts
-router.get('/', async (req: Request, res: Response) =>{
+router.get('/', async (req: Request, res: Response) => {
     try {
-        const {isSublease, page, limit} = req.query;
+        const { isSublease, page, limit } = req.query;
 
         const filter: any = {};
         if (isSublease) {
@@ -33,12 +33,12 @@ router.get('/', async (req: Request, res: Response) =>{
         }
 
         const pageNumber = page ? parseInt(page as string, 10) : 1;
-        const pageSize = page ? parseInt(limit as string, 10) : 10;
+        const pageSize = limit ? parseInt(limit as string, 10) : 10;
         const skip = (pageNumber - 1) * pageSize;
-        
+
         const contracts = await HousingContract.find(filter)
             .skip(skip)
-            .limit(pageSize)
+            .limit(pageSize);
 
         const totalContracts = await HousingContract.countDocuments(filter);
 
@@ -49,7 +49,11 @@ router.get('/', async (req: Request, res: Response) =>{
             totalPages: Math.ceil(totalContracts / pageSize),
         });
     } catch (error) {
-        handleError(error, res, 500, 'Unknown error from server side');
+        if (error instanceof Error) {
+            res.status(500).json({ error: error.message });
+        } else {
+            res.status(500).json({ error: 'Unknown error from server side' });
+        }
     }
 });
 
