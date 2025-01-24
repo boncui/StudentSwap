@@ -2,35 +2,37 @@ import React, {useEffect, useState } from 'react';
 import axios from 'axios';
 import MapComponent from '../components/Sublease/GoogleMap';
 
-//REMOVE ONCE YOU HAVE DATA
-const mockSubleases = [
-    {
-        id: 1,
-        title: 'Beautiful Studio Apartment',
-        price: '$1,200/month',
-        beds: 1,
-        baths: 1,
-        image: 'https://via.placeholder.com/150',
-    },
-    {
-        id: 2,
-        title: 'Spacious 2-Bedroom Apartment',
-        price: '$2,400/month',
-        beds: 2,
-        baths: 2,
-        image: 'https://via.placeholder.com/150',
-    },
-    {
-        id: 3,
-        title: 'Affordable Room for Rent',
-        price: '$800/month',
-        beds: 1,
-        baths: 1,
-        image: 'https://via.placeholder.com/150',
-    },
-]
+interface Sublease {
+    id: string;
+    title: string;
+    price: string;
+    beds: number;
+    baths: number;
+    image: string;
+}
 
 const SubleasePage:React.FC = () => {
+    const [subleases, setSubleases] = useState<Sublease[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    
+    useEffect(() => {
+        const fetchSubleases = async () => {
+            setLoading(true);
+            setError('');
+            try {
+                const response = await axios.get('http://localhost:5001/api/housing-contracts')
+                setSubleases(response.data);
+            } catch (err) {
+                setError('Failed to fetch sublease data.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchSubleases();
+    }, []);
+
     return (
         <div className='flex h-screen'>
             {/*Left: Map*/}
@@ -58,12 +60,13 @@ const SubleasePage:React.FC = () => {
 
                 {/* Sublease Listings */}
                 <div className='p-4'>
-                    {/* Placeholder for Sublease Cards */}
+                    {loading && <p>Loading sublease listings...</p>}
+                    {error && <p className="text-red-500">{error}</p>}
                     <div className='grid grid-cols-2 gap-4'>
-                        {mockSubleases.map((sublease) => (
+                        {subleases.map((sublease) => (
                             <div key={sublease.id} className='border p-4 rounded shadow'>
                                 <img
-                                    src={sublease.image}
+                                    src={sublease.image || 'https://via.placeholder.com/150'}
                                     alt={sublease.title}
                                     className='w-full h-32 object-cover rounded mb-2'
                                 />

@@ -3,6 +3,14 @@ import HousingContract from '../models/HousingContract';
 
 const router = express.Router();
 
+const handleError = (error: unknown, res: Response, statusCode = 500, defaultMessage = 'An unknown error occurred') => {
+    if (error instanceof Error) {
+        res.status(statusCode).json({error: error.message});
+    } else{
+        res.status(statusCode).json({ error: defaultMessage });
+    }
+}
+
 //Create housing contract
 router.post('/create', async (req: Request, res: Response) => {
     try {
@@ -10,25 +18,38 @@ router.post('/create', async (req: Request, res: Response) => {
         await contract.save();
         res.status(201).json(contract);
     } catch (error){
-        if (error instanceof Error) {
-            res.status(400).json({error: error.message});
-        } else{
-            res.status(400).json({ error: 'An unknown error occurred on client side' });
-        }
+        handleError(error, res, 400, 'An unknown error occurred on client side');
     }
 });
 
 //Get all the Housing Contracts
 router.get('/', async (req: Request, res: Response) =>{
     try {
-        const contracts = await HousingContract.find();
-        res.status(200).json(contracts);
-    } catch (error) {
-        if (error instanceof Error) {
-            res.status(500).json({ error: error.message});
-        } else {
-            res.status(500).json({ error: 'Unknown error from server side'});
+        const {isSublease, page, limit} = req.query;
+
+        const filter: any = {};
+        if (isSublease) {
+            filter.isSublease = isSublease === 'true';
         }
+
+        const pageNumber = page ? parseInt(page as string, 10) : 1;
+        const pageSize = page ? parseInt(limit as string, 10) : 10;
+        const skip = (pageNumber - 1) * pageSize;
+        
+        const contracts = await HousingContract.find(filter)
+            .skip(skip)
+            .limit(pageSize)
+
+        const totalContracts = await HousingContract.countDocuments(filter);
+
+        res.status(200).json({
+            contracts,
+            total: totalContracts,
+            currentPage: pageNumber,
+            totalPages: Math.ceil(totalContracts / pageSize),
+        });
+    } catch (error) {
+        handleError(error, res, 500, 'Unknown error from server side');
     }
 });
 
@@ -42,11 +63,7 @@ router.get('/:id', async (req: Request, res: Response) => {
         }
         res.status(200).json(contract);
     } catch (error) {
-        if (error instanceof Error){
-            res.status(500).json({ error: error.message});
-        } else {
-            res.status(500).json({error: 'An unknown error from server side'});
-        }
+        handleError(error, res, 500, 'An unknown error from server side');
     }
 });
 
@@ -63,11 +80,7 @@ router.put('/:id', async (req: Request, res: Response) => {
         }
         res.status(200).json(updatedContract);
     } catch (error) {
-        if (error instanceof Error){
-            res.status(400).json({ error: error.message});
-        } else {
-            res.status(400).json({error: 'Unkown error from client side'});
-        }
+        handleError(error, res, 400, 'Unknown error from client side');
     }
 });
 
@@ -82,11 +95,7 @@ router.delete('/:id', async (req: Request, res: Response) => {
         }
         res.status(200).json({message: 'Housing Contract successfully deleted!'});
     } catch (error){
-        if (error instanceof Error){
-            res.status(500).json({error: error.message});
-        } else {
-            res.status(500).json({error: 'An unknown error occured on server side'});
-        }
+        handleError(error, res, 500, 'An unknown error occurred on server side');
     }
 });
 
