@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@react-google-maps/api": "^2.20.5",
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.7.9",
     "cra-template-typescript": "1.2.0",
@@ -38,6 +39,7 @@
     ]
   },
   "devDependencies": {
+    "@types/google.maps": "^3.58.1",
     "@types/react": "^19.0.7",
     "@types/react-dom": "^19.0.3",
     "autoprefixer": "^10.4.20",

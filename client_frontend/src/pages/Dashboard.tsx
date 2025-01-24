@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import LogoutButton from '../components/LogoutButton';
 
 const Dashboard:React.FC = () => {
