@@ -11,6 +11,11 @@ interface IHousingContract extends Document {
     moveInFee: number;
     moveOutFee: number;
     rooms: 'studio' | 1 | 2 | 3 | 4 | 5 | 6;
+    title: string; // Required title for the listing
+    postedBy: mongoose.Types.ObjectId;
+    photos?: string[];
+    description?: string;
+    isSublease: { type: Boolean, required: true };              //TO Indicate that it's a sublease
 
     features?: {
         washer?: boolean;
@@ -46,6 +51,11 @@ const HousingContractSchema: Schema = new Schema(
             required: true,
             enum: ['studio', 1, 2, 3, 4, 5, 6],
         },
+        title: {type: String, required:true},
+        postedBy: {type: Schema.Types.ObjectId, ref: 'User', required: true},
+        photos: [{type: String}],
+        description: {type: String},
+        isSublease: { type: Boolean, required: true, default: false },
 
         features: {
             washer: { type: Boolean },

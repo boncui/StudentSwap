@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useEffect, useState } from 'react';
+import axios from 'axios';
 import MapComponent from '../components/Sublease/GoogleMap';
 
+//REMOVE ONCE YOU HAVE DATA
 const mockSubleases = [
     {
         id: 1,
