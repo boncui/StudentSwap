@@ -1,6 +1,33 @@
 import React from 'react';
 import MapComponent from '../components/Sublease/GoogleMap';
 
+const mockSubleases = [
+    {
+        id: 1,
+        title: 'Beautiful Studio Apartment',
+        price: '$1,200/month',
+        beds: 1,
+        baths: 1,
+        image: 'https://via.placeholder.com/150',
+    },
+    {
+        id: 2,
+        title: 'Spacious 2-Bedroom Apartment',
+        price: '$2,400/month',
+        beds: 2,
+        baths: 2,
+        image: 'https://via.placeholder.com/150',
+    },
+    {
+        id: 3,
+        title: 'Affordable Room for Rent',
+        price: '$800/month',
+        beds: 1,
+        baths: 1,
+        image: 'https://via.placeholder.com/150',
+    },
+]
+
 const SubleasePage:React.FC = () => {
     return (
         <div className='flex h-screen'>
@@ -31,18 +58,21 @@ const SubleasePage:React.FC = () => {
                 <div className='p-4'>
                     {/* Placeholder for Sublease Cards */}
                     <div className='grid grid-cols-2 gap-4'>
-                        <div className='border p-4 rounded shadow'>
-                            <p>Sublease Card 1</p>
-                        </div>
-                        <div className='border p-4 rounded shadow'>
-                            <p>Sublease Card 2</p>
-                        </div>
-                        <div className='border p-4 rounded shadow'>
-                            <p>Sublease Card 3</p>
-                        </div>
-                        <div className='border p-4 rounded shadow'>
-                            <p>Sublease Card 4</p>
-                        </div>
+                        {mockSubleases.map((sublease) => (
+                            <div key={sublease.id} className='border p-4 rounded shadow'>
+                                <img
+                                    src={sublease.image}
+                                    alt={sublease.title}
+                                    className='w-full h-32 object-cover rounded mb-2'
+                                />
+                                <h2 className='font-bold text-lg'>{sublease.title}</h2>
+                                <p>{sublease.price}</p>
+                                <p>
+                                    {sublease.beds} Bed{(sublease.beds > 1) ? 's' : ''}, {' '}
+                                    {sublease.baths} bath{(sublease.baths > 1) ? 's' : ''}
+                                </p>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>

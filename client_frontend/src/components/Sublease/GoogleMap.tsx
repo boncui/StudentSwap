@@ -18,7 +18,7 @@ const MapComponent: React.FC = () => {
             <GoogleMap
                 mapContainerStyle={containerStyle}
                 center={center}
-                zoom={12}
+                zoom={14}
             >
                 {/* Example Marker*/}
                 <Marker position={center} />
