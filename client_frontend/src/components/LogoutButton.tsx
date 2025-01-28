@@ -5,8 +5,10 @@ const LogoutButton: React.FC = () => {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        localStorage.removeItem('token'); //removes the token
-        navigate('/'); //redirects users to the landing page
+        localStorage.removeItem('token'); 
+        localStorage.removeItem('user'); // Clear user data
+        navigate('/'); 
+        window.location.reload(); // Refresh the app state
     };
 
     return (

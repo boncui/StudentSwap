@@ -4,7 +4,6 @@ import { register } from '../services/api';
 
 const Register:React.FC = () => {
     const [fullName, setFullName] = useState('');
-    const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [password, setPassword] = useState('');
@@ -18,7 +17,7 @@ const Register:React.FC = () => {
             return;
         }
         try {
-            await register ({fullName, email, phone, password}); // call register API
+            await register ({fullName, email, password}); // call register API
             navigate('/login');
         } catch (err) {
             setError('Registration failed. Please try again.');
@@ -46,14 +45,6 @@ const Register:React.FC = () => {
                     placeholder="Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="border p-2 w-full mb-4 rounded"
-                    required
-                />
-                <input
-                    type="text"
-                    placeholder="Phone Number"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
                     className="border p-2 w-full mb-4 rounded"
                     required
                 />

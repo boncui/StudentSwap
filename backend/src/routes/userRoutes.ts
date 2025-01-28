@@ -14,11 +14,11 @@ const universityDomains = [
 
 //Validation Middlware for creating users
 const validateCreateUser = [
-    check('fullName')
+    check('Name')
         .notEmpty()
-        .withMessage('Full Name is required.')
+        .withMessage('Name is required.')
         .isLength({min:2})
-        .withMessage('Full Name must be at least 3 characters long.'),
+        .withMessage('Name must be at least 3 characters long.'),
     check('email')
         .notEmpty()
         .withMessage('Email is required.')
@@ -31,11 +31,6 @@ const validateCreateUser = [
             }
             return true; // Validation passed
         }),
-    check('phone')
-        .notEmpty()
-        .withMessage('Phone number is required')
-        .isMobilePhone('any') 
-        .withMessage('Invalid phone number format.'),
     check('password')
         .notEmpty()
         .withMessage('Password is required')
@@ -59,10 +54,6 @@ const validateUpdateUser = [
         .optional()
         .isEmail()
         .withMessage('Invalid email format.'),
-    check('phone')
-        .optional()
-        .isMobilePhone(['en-US', 'en-GB'])
-        .withMessage('Invalid phone number format'),
 ];
 
 //Validation for valid UserID
@@ -88,7 +79,7 @@ const handleValidationErrors = (req: Request, res: Response, next: NextFunction)
 router.post('/create', validateCreateUser, handleValidationErrors, async (req: Request, res: Response) => {
     try {
         
-        const { fullName, email, phone, password }: { fullName: string; email: string; phone: string ; password: string} = req.body;
+        const { fullName, email, password }: { fullName: string; email: string; password: string} = req.body;
 
         //check for duplicate users
         const existingUser = await User.findOne({ email });
@@ -98,7 +89,7 @@ router.post('/create', validateCreateUser, handleValidationErrors, async (req: R
 
         // Save user to database
         const hashedPassword = await bcrypt.hash(password, 10);
-        const user = new User({ fullName, email, phone, password: hashedPassword });
+        const user = new User({ fullName, email, password: hashedPassword });
         await user.save();
         res.status(201).json(user);
     } catch (error) {
@@ -184,7 +175,7 @@ router.get('/', async (req: Request, res: Response) => {
 router.put('/:id', authenticate, validateUpdateUser, handleValidationErrors, async (req: Request, res: Response) =>{
     try {
         const {id} = req.params;
-        const { fullName, email, phone }: { fullName?: string; email?: string; phone?: string } = req.body;
+        const { fullName, email}: { fullName?: string; email?: string} = req.body;
         
         //check if user exists
         const user = await User.findById(id);
@@ -195,7 +186,6 @@ router.put('/:id', authenticate, validateUpdateUser, handleValidationErrors, asy
         //update fields if user found
         if (fullName) user.fullName = fullName;
         if (email) user.email = email;
-        if (phone) user.phone = phone;
 
         //save the updated user
         const updatedUser = await user.save();
