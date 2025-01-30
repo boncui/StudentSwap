@@ -8,6 +8,7 @@ import NavBar from './components/NavBar';
 import SubleasePage from './pages/SubleasePage';
 import Account from './pages/Account';
 import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const App: React.FC = () => {
   return (
@@ -18,14 +19,18 @@ const App: React.FC = () => {
           <Route path ="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/dashboard" element={<Dashboard />} />
 
-          <Route path="/listings" element={<div>Listings Page</div>} />
-          <Route path="/subleases" element={<SubleasePage />} />
-          <Route path="/market" element={<div>Market Page</div>} />
+          {/* Protected Routes*/}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/listings" element={<div>Listings Page</div>} />
+            <Route path="/subleases" element={<SubleasePage />} />
+            <Route path="/market" element={<div>Market Page</div>} />
+            <Route path="/account" element={<Account />} />
+            <Route path="/list-with-us" element={<div>List with Us Page</div>} />
+          </Route>
+
           <Route path="/resources" element={<div>Resources Page</div>} />
-          <Route path="/account" element={<Account />} />
-          <Route path="/list-with-us" element={<div>List with Us Page</div>} />
         </Routes>
       </Router>
     </AuthProvider>

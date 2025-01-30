@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response, Router } from 'express';
 import {check, validationResult, ValidationError} from 'express-validator';
-import authenticate from '../middleware/authMiddleware';
+import authenticate, {AuthenticatedRequest} from '../middleware/authMiddleware';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import User from '../models/User';
@@ -132,6 +132,22 @@ router.post('/login', async (req: Request, res: Response) => {
         }
     }
 });
+
+//A /me route to properly authenticate and return the user
+router.get('/me', authenticate, async (req: AuthenticatedRequest, res: Response) => {
+    try {
+        if (!req.user) {
+            return res.status(401).json({error: 'Unauthorized: No user found in request'});
+        }
+
+        const user = await User.findById(req.user.id).select('-password'); //exclude password
+        if (!user) return res.status(404).json({error: 'User not found'});
+
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({ error: 'Server error fetching user data'});
+    }
+})
 
 //Get user by ID
 router.get('/:id', validateObjectId, handleValidationErrors, async(req: Request, res: Response) => {

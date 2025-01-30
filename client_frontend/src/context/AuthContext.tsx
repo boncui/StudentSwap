@@ -12,23 +12,26 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const storedUser = localStorage.getItem('user');
-    const [user, setUser] = useState<any>(
-        storedUser ? (storedUser !== 'undefined' ? JSON.parse(storedUser) : null) : null
-    );
+    const [user, setUser] = useState<any>(null);
     const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
 
     useEffect(() => {
         const verifyToken = async () => {
-            if (token) {
-                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-                try {
-                    const response = await axios.get('http://localhost:5001/api/users/me');
-                    setUser(response.data);
-                    localStorage.setItem('user', JSON.stringify(response.data));
-                } catch (error) {
-                    logout(); // Force logout on invalid token
-                }
+            if (!token) {
+                setUser(null);
+                return;
+            }
+            
+            try {
+                const response = await axios.get('http://localhost:5001/api/users/me', {
+                    headers: { Authorization: `Bearer ${token}`},
+                });
+
+                setUser(response.data);
+                localStorage.setItem('user', JSON.stringify(response.data));
+            } catch (error){
+                console.error('Token verification failed:', error);
+                logout(); // Force logout on invalid token
             }
         };
         verifyToken();
@@ -42,8 +45,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             localStorage.setItem('token', token);
             localStorage.setItem('user', JSON.stringify(user));
 
-            setUser(user);
             setToken(token);
+            setUser(user);
         } catch (error) {
             throw new Error('Invalid login credentials');
         }
@@ -52,8 +55,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const logout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
-
-        delete axios.defaults.headers.common['Authorization'];
+        localStorage.clear();
         setUser(null);
         setToken(null);
     };

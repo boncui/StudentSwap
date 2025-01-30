@@ -3,16 +3,20 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const NavBar: React.FC = () => {
-    const { isAuthenticated, logout, user } = useAuth(); // Include `user` for display
+    const { isAuthenticated, logout, user } = useAuth();
 
     return (
         <nav className="bg-blue-500 text-white px-4 py-2 flex justify-between items-center">
             {/* Left Side Links */}
             <div className='flex space-x-4'>
-                <Link to='/dashboard' className="hover:underline">Dashboard</Link>
-                <Link to='/listings' className="hover:underline">Listings</Link>
-                <Link to='/subleases' className="hover:underline">Subleases</Link>
-                <Link to='/market' className="hover:underline">Market</Link>
+                {isAuthenticated && (
+                    <>
+                        <Link to='/dashboard' className="hover:underline">Dashboard</Link>
+                        <Link to='/listings' className="hover:underline">Listings</Link>
+                        <Link to='/subleases' className="hover:underline">Subleases</Link>
+                        <Link to='/market' className="hover:underline">Market</Link>
+                    </>
+                )}
                 <Link to='/resources' className="hover:underline">Resources</Link>
             </div>
 
