@@ -1,5 +1,8 @@
 import express, {Request, Response} from 'express';
 import HousingContract from '../models/HousingContract';
+import multer from 'multer';
+import path from 'path';
+
 
 const router = express.Router();
 

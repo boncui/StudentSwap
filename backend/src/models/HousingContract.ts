@@ -39,20 +39,20 @@ interface IHousingContract extends Document {
 const HousingContractSchema: Schema = new Schema(
     {
         location: { type: String, required: true },
-        startOfLease: { type: Date, required: true },
-        endOfLease: { type: Date, required: true },
+        startOfLease: { type: Date, required: false },      //OPTIONAL
+        endOfLease: { type: Date, required: false },        //OPTIONAL
         monthlyRent: { type: Number, required: true },
-        utilityFee: { type: Number, required: true },
-        managerPhone: { type: String, required: true },
-        moveInFee: { type: Number, required: true },
-        moveOutFee: { type: Number, required: true },
+        utilityFee: { type: Number, required: false },      //OPTIONAL
+        managerPhone: { type: String, required: false },    //OPTIONAL
+        moveInFee: { type: Number, required: false },       //OPTIONAL
+        moveOutFee: { type: Number, required: false },      //OPTIONAL
         rooms: {
-            type: Schema.Types.Mixed, // Allows both numbers and strings
+            type: Schema.Types.Mixed,
             required: true,
             enum: ['studio', 1, 2, 3, 4, 5, 6, 7],
         },
         baths: {
-            type: Schema.Types.Mixed, // Allows both numbers and strings
+            type: Schema.Types.Mixed,
             required: true,
             enum: ['shower', 1, 2, 3, 4, 5, 6, 7],
         },
@@ -61,11 +61,12 @@ const HousingContractSchema: Schema = new Schema(
         photos: [{type: String}],
         description: {type: String},
         isSublease: { type: Boolean, required: true, default: false },
+        availabilityStatus: { type: String, enum: ['Available', 'Pending', 'Taken'], default: 'Available'},
 
         features: {
             washer: { type: Boolean },
             dryer: { type: Boolean },
-            parking: { type: Schema.Types.Mixed }, // Allows boolean or strings
+            parking: { type: Schema.Types.Mixed },
             furnished: { type: Boolean },
             gym: { type: Boolean },
             amenities: [{ type: String }], // Array of strings

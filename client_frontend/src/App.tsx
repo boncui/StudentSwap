@@ -9,6 +9,7 @@ import SubleasePage from './pages/SubleasePage';
 import Account from './pages/Account';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import ListWithUs from './pages/ListWithUs';
 
 const App: React.FC = () => {
   return (
@@ -27,7 +28,7 @@ const App: React.FC = () => {
             <Route path="/subleases" element={<SubleasePage />} />
             <Route path="/market" element={<div>Market Page</div>} />
             <Route path="/account" element={<Account />} />
-            <Route path="/list-with-us" element={<div>List with Us Page</div>} />
+            <Route path="/list-with-us" element={<ListWithUs />} />
           </Route>
 
           <Route path="/resources" element={<div>Resources Page</div>} />
