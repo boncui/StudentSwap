@@ -26,4 +26,7 @@ yarn-error.log*
 # CodeGPT configuration
 .codegpt
 
+#Sublease AI
+sublease_ai/
+sublease_ai\ 2.0/
 # END OF .gitignore

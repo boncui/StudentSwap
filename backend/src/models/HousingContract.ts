@@ -1,22 +1,25 @@
-import mongoose, {Schema, Document} from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
+import { ContractCategory } from "../config/contractTypes"; // Ensure this is imported correctly
 
-//TS interface for safety
+// TypeScript interface for Housing Contracts
 interface IHousingContract extends Document {
     location: string;
-    startOfLease: Date;
-    endOfLease: Date;
+    startOfLease?: Date;
+    endOfLease?: Date;
     monthlyRent: number;
-    utilityFee: number;
-    managerPhone: string;
-    moveInFee: number;
-    moveOutFee: number;
+    utilityFee?: number;
+    managerPhone?: string;
+    moveInFee?: number;
+    moveOutFee?: number;
     rooms: 'studio' | 1 | 2 | 3 | 4 | 5 | 6 | 7;
     bath: 'shower' | 1 | 2 | 3 | 4 | 5 | 6 | 7;
     title: string; // Required title for the listing
     postedBy: mongoose.Types.ObjectId;
-    photos?: string[];
     description?: string;
-    isSublease: { type: Boolean, required: true };              //TO Indicate that it's a sublease
+    isSublease: boolean; // Indicates that it's a sublease
+    isApartment: boolean;
+    category: string; // Added to classify under REAL_ESTATE
+    availabilityStatus: 'Available' | 'Pending' | 'Taken';
 
     features?: {
         washer?: boolean;
@@ -32,20 +35,21 @@ interface IHousingContract extends Document {
         fridge?: boolean;
         freezer?: boolean;
         squareFootage?: number;
+        microwave?: boolean;
     };
 }
 
-// Create the Schema
+// Define Schema
 const HousingContractSchema: Schema = new Schema(
     {
         location: { type: String, required: true },
-        startOfLease: { type: Date, required: false },      //OPTIONAL
-        endOfLease: { type: Date, required: false },        //OPTIONAL
+        startOfLease: { type: Date },
+        endOfLease: { type: Date },
         monthlyRent: { type: Number, required: true },
-        utilityFee: { type: Number, required: false },      //OPTIONAL
-        managerPhone: { type: String, required: false },    //OPTIONAL
-        moveInFee: { type: Number, required: false },       //OPTIONAL
-        moveOutFee: { type: Number, required: false },      //OPTIONAL
+        utilityFee: { type: Number },
+        managerPhone: { type: String },
+        moveInFee: { type: Number },
+        moveOutFee: { type: Number },
         rooms: {
             type: Schema.Types.Mixed,
             required: true,
@@ -56,12 +60,12 @@ const HousingContractSchema: Schema = new Schema(
             required: true,
             enum: ['shower', 1, 2, 3, 4, 5, 6, 7],
         },
-        title: {type: String, required:true},
-        postedBy: {type: Schema.Types.ObjectId, ref: 'User', required: true},
-        photos: [{type: String}],
-        description: {type: String},
+        title: { type: String, required: true },
+        postedBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+        description: { type: String },
         isSublease: { type: Boolean, required: true, default: false },
-        availabilityStatus: { type: String, enum: ['Available', 'Pending', 'Taken'], default: 'Available'},
+        category: { type: String, required: true, default: ContractCategory.REAL_ESTATE }, // Categorized as REAL_ESTATE
+        availabilityStatus: { type: String, enum: ['Available', 'Pending', 'Taken'], default: 'Available' },
 
         features: {
             washer: { type: Boolean },
@@ -80,9 +84,9 @@ const HousingContractSchema: Schema = new Schema(
         },
     },
     {
-        timestamps: true,
+        timestamps: true, // Automatically adds createdAt and updatedAt
     }
 );
 
-//export model
-export default mongoose.model<IHousingContract>('HousingContract', HousingContractSchema);
+// Export Model
+export default mongoose.model<IHousingContract>("HousingContract", HousingContractSchema);

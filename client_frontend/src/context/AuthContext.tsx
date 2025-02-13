@@ -1,6 +1,14 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
+//LEt's define the user
+interface User {
+    _id: string;
+    fullName: string;
+    email: string;
+}
+
+//Defined AuthContext Type
 interface AuthContextType {
     user: any;
     token: string | null;
@@ -14,11 +22,14 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<any>(null);
     const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
+    const [isLoading, setIsLoading] = useState(true);
 
+    //Load the User from local storage when app initializes
     useEffect(() => {
         const verifyToken = async () => {
             if (!token) {
                 setUser(null);
+                setIsLoading(false);
                 return;
             }
             
@@ -32,6 +43,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             } catch (error){
                 console.error('Token verification failed:', error);
                 logout(); // Force logout on invalid token
+            } finally {
+                setIsLoading(false);
             }
         };
         verifyToken();
@@ -52,6 +65,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     };
 
+    //Logout Functionality
     const logout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
@@ -61,12 +75,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     return (
-        <AuthContext.Provider value={{ user, token, isAuthenticated: !!token, login, logout }}>
-            {children}
+        <AuthContext.Provider value={{ user, token, isAuthenticated: !!user, login, logout }}>
+            {!isLoading && children}
         </AuthContext.Provider>
     );
 };
 
+//Custom hook to use AuthContext
 export const useAuth = () => {
     const context = useContext(AuthContext);
     if (!context) {

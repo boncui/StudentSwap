@@ -16,6 +16,8 @@ const Account: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [userData, setUserData] = useState<any>(null);
+    const [userListings, setUserListings] = useState<any[]>([]);
+
   
     useEffect(() => {
       const fetchUserData = async () => {
@@ -26,8 +28,14 @@ const Account: React.FC = () => {
           }
 
           try {
-              const response = await axios.get(`http://localhost:5001/api/users/${user._id}`);
-              setUserData(response.data);
+            //Fetch user details
+            const userResponse = await axios.get(`http://localhost:5001/api/users/${user._id}`);
+            setUserData(userResponse.data);
+
+            //Fetch user's Listings
+            const listingResponse = await axios.get(`http://localhost:5001/api/housing-contracts/user/${user._id}`);
+            setUserListings(listingResponse.data);
+
           } catch (err) {
               setError('Failed to load user details');
           } finally {
@@ -54,6 +62,18 @@ const Account: React.FC = () => {
       }
   };
 
+  const handleDeleteListing = async (listingId: string) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this listing?");
+    if (!confirmDelete) return;
+
+    try {
+        await axios.delete(`http://localhost:5001/api/housing-contracts/${listingId}`);
+        setUserListings((prevListings) => prevListings.filter((listing) => listing._id != listingId));
+    } catch (error) {
+        alert("Failed to delete listing. Please try again.");
+    }
+  };
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
 
@@ -62,15 +82,30 @@ const Account: React.FC = () => {
           {userData ? (
               <div>
                   <h1 className="text-xl font-bold mb-4">Account Details</h1>
-                  <p><strong>Name:</strong> {userData.fullName}</p>
-                  <p><strong>Email:</strong> {userData.email}</p>
+                    <p><strong>Name:</strong> {userData.fullName}</p>
+                    <p><strong>Email:</strong> {userData.email}</p>
 
-                  <h2 className="text-lg font-bold mt-6">Your Sublistings</h2>
-                  <ul>
-                      {userData.sublistings?.map((listing: any) => (
-                          <li key={listing.id}>{listing.title}</li>
-                      ))}
-                  </ul>
+                  <h2 className="text-lg font-bold mt-6">Your Listings</h2>
+                  {userListings.length > 0 ? (
+                    <ul className='space-y-3'>
+                        {userListings.map((listing) => (
+                            <li key={listing._id} className='border p-3 rounded shadow'>
+                                <p><strong>{listing.title}</strong></p>
+                                <p>${listing.monthlyRent} / month</p>
+                                <p><strong>Location:</strong>{listing.location}</p>
+
+                                <button
+                                    onClick={() => handleDeleteListing(listing._id)}
+                                    className='bg-red-500 text-white px-3 py-1 mt-2 rounded hover:bg-red-600'
+                                >
+                                    Delete Listing
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                  ) : (
+                    <p className='text-gray-500'>You have not created a listing yet.</p>
+                  )}
 
                   <h2 className="text-lg font-bold mt-6">Liked Listings</h2>
                   <ul>

@@ -5,7 +5,7 @@ import Register from './pages/Register';
 import Landing from './pages/Landing';
 import Dashboard from './pages/Dashboard';
 import NavBar from './components/NavBar';
-import SubleasePage from './pages/SubleasePage';
+import ContractsPage from './pages/ContractsPage';
 import Account from './pages/Account';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -17,16 +17,14 @@ const App: React.FC = () => {
       <Router>
         <NavBar />
         <Routes>
-          <Route path ="/" element={<Landing />} />
+          <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-          {/* Protected Routes*/}
+          {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/listings" element={<div>Listings Page</div>} />
-            <Route path="/subleases" element={<SubleasePage />} />
-            <Route path="/market" element={<div>Market Page</div>} />
+            <Route path="/contracts" element={<ContractsPage />} />
             <Route path="/account" element={<Account />} />
             <Route path="/list-with-us" element={<ListWithUs />} />
           </Route>
@@ -35,7 +33,6 @@ const App: React.FC = () => {
         </Routes>
       </Router>
     </AuthProvider>
-    
   );
 };
 

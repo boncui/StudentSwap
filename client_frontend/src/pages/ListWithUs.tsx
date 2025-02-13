@@ -1,35 +1,38 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import {useAuth} from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const ListWithUs: React.FC = () => {
-    const {user} = useAuth();
+    const { user } = useAuth();
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
-        title:"",
-        location:"",
-        startOfLease:"",
-        endOfLease:"",
-        monthlyRent:"",
-        utilityFee:"",
-        moveInFee:"",
-        moveOutFee:"",
-        rooms:"",
-        baths:"",
-        description:"",
+        title: "",
+        location: "",
+        startOfLease: "",
+        endOfLease: "",
+        monthlyRent: "",
+        utilityFee: "",
+        moveInFee: "",
+        moveOutFee: "",
+        rooms: "",
+        baths: "",
+        description: "",
         isSublease: false,
+        isApartment: false,
         availabilityStatus: "Available",
         features: {
             washer: false,
             dryer: false,
             furnished: false,
             gym: false,
+            parking: false,
             petsAllowed: false,
             dishwasher: false,
             fridge: false,
             freezer: false,
+            microwave: false, // ✅ New Feature
             squareFootage: "",
         },
     });
@@ -38,12 +41,12 @@ const ListWithUs: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
 
-    //handle all input forms
+    // Handle all input forms
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
     ) => {
         const { name, value, type } = e.target;
-    
+
         if (type === "checkbox") {
             const checked = (e.target as HTMLInputElement).checked;
             if (name.startsWith("features.")) {
@@ -65,27 +68,25 @@ const ListWithUs: React.FC = () => {
             setFormData((prevState) => ({
                 ...prevState,
                 [name]: ["monthlyRent", "utilityFee", "moveInFee", "moveOutFee", "rooms", "baths", "features.squareFootage"].includes(name)
-                    ? value === "" ? 0 : Number(value) // ✅ Convert to 0 if empty
+                    ? value === "" ? 0 : Number(value)
                     : value,
             }));
         }
     };
-    
-    
 
-    //Handle Form Submissions
+    // Handle Form Submissions
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
         setSuccess(null);
-    
+
         if (!user) {
             setError("You must be logged in to submit a listing.");
             setLoading(false);
             return;
         }
-    
+
         // Ensure numeric fields are properly converted before sending to the API
         const formattedData = {
             ...formData,
@@ -95,20 +96,24 @@ const ListWithUs: React.FC = () => {
             moveOutFee: Number(formData.moveOutFee),
             rooms: Number(formData.rooms),
             baths: Number(formData.baths),
+            isApartment: Boolean(formData.isApartment),
             features: {
                 ...formData.features,
                 squareFootage: Number(formData.features.squareFootage),
             },
             postedBy: user._id, // Attach User ID
         };
-    
+
+        //for debugging
+        console.log("Submitting form data:", formData.features);
+
         try {
-            await axios.post("http://localhost:5001/api/housing-contracts", formattedData, {
+            await axios.post("http://localhost:5001/api/housing-contracts/create", formattedData, {
                 headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
             });
-    
+
             setSuccess("Listing submitted successfully!");
-    
+
             // Reset form after successful submission
             setFormData({
                 title: "",
@@ -123,20 +128,23 @@ const ListWithUs: React.FC = () => {
                 baths: "",
                 description: "",
                 isSublease: false,
+                isApartment: false,
                 availabilityStatus: "Available",
                 features: {
                     washer: false,
                     dryer: false,
                     furnished: false,
                     gym: false,
+                    parking: false,
                     petsAllowed: false,
                     dishwasher: false,
                     fridge: false,
                     freezer: false,
+                    microwave: false, // ✅ Reset New Feature
                     squareFootage: "",
                 },
             });
-    
+
             setTimeout(() => navigate("/dashboard"), 2000); // Redirect after success
         } catch (err) {
             setError("Failed to submit listing. Please try again.");
@@ -144,58 +152,58 @@ const ListWithUs: React.FC = () => {
             setLoading(false);
         }
     };
-    
-    
 
     return (
         <div className="max-w-2x1 mx-auto mt-8 p-6 bg-white rounded-lg shadow-lg">
-            <h2 className="text-2xl font-bold text-center mb-6">List Your Housing</h2>
+            <h2 className="text-2xl font-bold text-center mb-6">List Your Contract</h2>
 
-            {error && <p className='text-red-500 text-center'>{error}</p>}
+            {error && <p className="text-red-500 text-center">{error}</p>}
             {success && <p className="text-green-500 text-center">{success}</p>}
 
-            <form onSubmit={handleSubmit} className='space-y-4'>
+            <form onSubmit={handleSubmit} className="space-y-4">
                 <input
-                    type='text'
-                    name='title'
-                    placeholder='Descriptive Title'
+                    type="text"
+                    name="title"
+                    placeholder="Descriptive Title"
                     className="border p-2 w-full rounded"
                     value={formData.title}
                     onChange={handleChange}
                     required
                 />
                 <input
-                    type='text'
-                    name='location'
-                    placeholder='Location/ Address'
+                    type="text"
+                    name="location"
+                    placeholder="Location/ Address"
                     className="border p-2 w-full rounded"
                     value={formData.location}
                     onChange={handleChange}
                     required
                 />
-                <div className='flex space-x-4'>
+                <div className="flex space-x-4">
+                    <p>Lease Start</p>
                     <input
                         type="date"
                         name="startOfLease"
-                        className='border p-2 w-1/2 rounded'
+                        className="border p-2 w-1/2 rounded"
                         value={formData.startOfLease}
                         onChange={handleChange}
                     />
+                    <p>Lease End</p>
                     <input
                         type="date"
                         name="endOfLease"
-                        className='border p-2 w-1/2 rounded'
+                        className="border p-2 w-1/2 rounded"
                         value={formData.endOfLease}
                         onChange={handleChange}
                     />
                 </div>
 
-                <div className='flex space-x-4'>
+                <div className="flex space-x-4">
                     <input
                         type="number"
                         name="monthlyRent"
                         placeholder="Monthly Rent ($)"
-                        className='border p-2 w-1/2 rounded'
+                        className="border p-2 w-1/2 rounded"
                         value={formData.monthlyRent}
                         onChange={handleChange}
                         required
@@ -203,8 +211,8 @@ const ListWithUs: React.FC = () => {
                     <input
                         type="number"
                         name="utilityFee"
-                        placeholder="Utility Fee ($)"
-                        className='border p-2 w-1/2 rounded'
+                        placeholder="Estimated Utility Fee ($)"
+                        className="border p-2 w-1/2 rounded"
                         value={formData.utilityFee}
                         onChange={handleChange}
                     />
@@ -212,7 +220,7 @@ const ListWithUs: React.FC = () => {
 
                 <textarea
                     name="description"
-                    placeholder='Description of the listing'
+                    placeholder="Description of the listing"
                     className="border p-2 w-full rounded"
                     value={formData.description}
                     onChange={handleChange}
@@ -228,35 +236,40 @@ const ListWithUs: React.FC = () => {
                     <span>Is this a sublease?</span>
                 </label>
 
-                <h3 className='font-semibold'>Features:</h3>
-                <div className='grid grid-cols-2 gap-2'>
-                    <label className='flex items-center space-x-2'>
-                        <input
-                            type="checkbox"
-                            name="features.furnished"
-                            checked={formData.features.furnished}
-                            onChange={handleChange}
-                        />
-                        <span>Furnished</span>
-                    </label>
-                    <label className='flex items-center space-x-2'>
-                        <input
-                            type="checkbox"
-                            name='features.washer'
-                            checked = {formData.features.washer}
-                            onChange={handleChange}
-                        />
-                        <span>Washer</span>
-                    </label>
-                    <label className='flex items-center space-x-2'>
-                        <input
-                            type="checkbox"
-                            name="features.petsAllowed"
-                            checked={formData.features.petsAllowed}
-                            onChange={handleChange}
-                        />
-                        <span>Pets Allowed</span>
-                    </label>
+                <label className='flex items-center space-x-2'>
+                    <input
+                        type="checkbox"
+                        name="isApartment"
+                        checked={formData.isApartment}
+                        onChange={handleChange}
+                    />
+                    <span>Is this an apartment?</span>
+                </label>
+
+                <h3 className="font-semibold">Features:</h3>
+                <div className="grid grid-cols-2 gap-2">
+                    {[
+                        "furnished",
+                        "washer",
+                        "dryer",
+                        "dishwasher",
+                        "fridge",
+                        "freezer",
+                        "microwave",
+                        "gym",
+                        "parking",
+                        "petsAllowed",
+                    ].map((feature) => (
+                        <label key={feature} className="flex items-center space-x-2">
+                            <input
+                                type="checkbox"
+                                name={`features.${feature}`}
+                                checked={Boolean(formData.features[feature as keyof typeof formData.features])}
+                                onChange={handleChange}
+                            />
+                            <span>{feature.charAt(0).toUpperCase() + feature.slice(1)}</span>
+                        </label>
+                    ))}
                 </div>
 
                 <button
@@ -266,7 +279,6 @@ const ListWithUs: React.FC = () => {
                 >
                     {loading ? "Submitting..." : success ? "Redirecting..." : "Submit Listing"}
                 </button>
-
             </form>
         </div>
     );
