@@ -46,9 +46,20 @@ const ListWithUs: React.FC = () => {
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
     ) => {
         const { name, value, type } = e.target;
-
+        
         if (type === "checkbox") {
             const checked = (e.target as HTMLInputElement).checked;
+            
+            // ✅ Handle "isApartment" separately
+            if (name === "isApartment") {
+                setFormData((prevState) => ({
+                    ...prevState,
+                    isApartment: checked,
+                }));
+                return;
+            }
+    
+            // ✅ Handle features checkboxes
             if (name.startsWith("features.")) {
                 const featureName = name.split(".")[1];
                 setFormData((prevState) => ({
@@ -73,6 +84,7 @@ const ListWithUs: React.FC = () => {
             }));
         }
     };
+    
 
     // Handle Form Submissions
     const handleSubmit = async (e: React.FormEvent) => {
