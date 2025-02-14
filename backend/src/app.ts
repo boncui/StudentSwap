@@ -5,6 +5,7 @@ import housingRoutes from './routes/housingRoutes';
 import connectDB from './config/db';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import feedbackRoutes from "./routes/feedbackRoutes";
 
 
 dotenv.config();
@@ -30,6 +31,7 @@ const corsOptions = {
 
 app.use(express.json());
 app.use(cors(corsOptions));
+app.use("/api/feedback", feedbackRoutes);
 
 
 //Base route for testing

@@ -29,4 +29,8 @@ yarn-error.log*
 #Sublease AI
 sublease_ai/
 sublease_ai\ 2.0/
+
+#ENV files
+backend/.env
+client_frontend/.env
 # END OF .gitignore
