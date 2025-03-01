@@ -10,6 +10,8 @@ import Account from './pages/Account';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import ListWithUs from './pages/ListWithUs';
+import Resources from './pages/Resources';
+import ArchitectDashboard from './pages/ArchitectDashboard';
 
 const App: React.FC = () => {
   return (
@@ -27,9 +29,11 @@ const App: React.FC = () => {
             <Route path="/contracts" element={<ContractsPage />} />
             <Route path="/account" element={<Account />} />
             <Route path="/list-with-us" element={<ListWithUs />} />
+            {/* Architect Dashboard */}
+            <Route path="/architect-dashboard" element={<ArchitectDashboard />} />
           </Route>
 
-          <Route path="/resources" element={<div>Resources Page</div>} />
+          <Route path="/resources" element={<Resources />} />
         </Routes>
       </Router>
     </AuthProvider>

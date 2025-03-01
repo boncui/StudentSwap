@@ -17,6 +17,13 @@ const NavBar: React.FC = () => {
                     <>
                         <Link to='/dashboard' className={`hover:underline ${isActive('/dashboard')}`}>Dashboard</Link>
                         <Link to='/contracts' className={`hover:underline ${isActive('/contracts')}`}>Contracts</Link>
+
+                        {/* ✅ Show Architect Dashboard ONLY if user is an Architect */}
+                        {user?.role === "Architect" && (
+                            <Link to='/architect-dashboard' className={`hover:underline ${isActive('/architect-dashboard')}`}>
+                                Dashboard
+                            </Link>
+                        )}
                     </>
                 )}
                 <Link to='/resources' className={`hover:underline ${isActive('/resources')}`}>Resources</Link>

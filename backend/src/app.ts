@@ -1,11 +1,12 @@
 import express, { Request, Response } from 'express'; //express is used to create the server
 import dotenv from 'dotenv'; //dotenv is used for managing enviorment variables
 import userRoutes from './routes/userRoutes';
+import architectRoutes from './routes/architectRoutes';
 import housingRoutes from './routes/housingRoutes';
 import connectDB from './config/db';
 import mongoose from 'mongoose';
 import cors from 'cors';
-import feedbackRoutes from "./routes/feedbackRoutes";
+import suggestionRoutes from "./routes/suggestionRoutes";
 
 
 dotenv.config();
@@ -23,7 +24,7 @@ const app = express();
 const PORT = process.env.PORT || 5001; //PORT 5000 is being used by Mac
 
 const corsOptions = {
-    origin: ['http://localhost:54811'], // REPLACE w Frontend URL
+    origin: ['http://localhost:3000'], // REPLACE w Frontend URL
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true, //for cookies and tokens
@@ -31,7 +32,6 @@ const corsOptions = {
 
 app.use(express.json());
 app.use(cors(corsOptions));
-app.use("/api/feedback", feedbackRoutes);
 
 
 //Base route for testing
@@ -44,6 +44,13 @@ app.use('/api/users', userRoutes);
 
 //housing Routes
 app.use('/api/housing-contracts', housingRoutes);
+
+
+//architect routes
+app.use('/api/architect', architectRoutes);
+
+//suggestion routes
+app.use('/api/suggestions', suggestionRoutes);
 
 //Start the server
 app.listen(PORT, () => {

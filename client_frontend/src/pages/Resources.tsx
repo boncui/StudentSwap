@@ -24,7 +24,7 @@ const Resources: React.FC = () => {
         setSuccess(null);
 
         try {
-            await axios.post("http://localhost:5001/api/feedback", formData);
+            await axios.post("http://localhost:5001/api/suggestion", formData);
             setSuccess("Thank You! Your feedback has been sent!");
             setFormData({ name: "", email: "", message: ""}); //Reset the Form
         } catch (err) {
