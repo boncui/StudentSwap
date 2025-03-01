@@ -18,7 +18,7 @@ interface Contract {
     };
     description?: string;
     location: string;
-    postedBy?: { _id: string; phone: string }; // Include phone number for user connection
+    postedBy?: { _id: string; email: string };
 }
 
 const ContractsPage: React.FC = () => {
@@ -27,13 +27,15 @@ const ContractsPage: React.FC = () => {
     const [error, setError] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [selectedContract, setSelectedContract] = useState<Contract | null>(null);
+    const [editContract, setEditContract] = useState<Contract | null>(null);
     
     const fetchContracts = async (page: number) => {
         setLoading(true);
         setError('');
         try {
             const response = await axios.get('http://localhost:5001/api/housing-contracts', {
-                params: { page, limit: 6 }, // Fetch 6 contracts per page
+                params: { page, limit: 7 }, // Fetch 6 contracts per page
             });
 
             const { contracts, totalPages } = response.data;
@@ -55,6 +57,50 @@ const ContractsPage: React.FC = () => {
             setCurrentPage(newPage);
         }
     };
+
+    const handleEditClick = (contract: Contract) => {
+        setSelectedContract(contract);
+        setEditContract(contract);
+    };
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        if (!editContract) return;
+
+        const updatedContract = { ...editContract, [e.target.name]: e.target.value };
+
+        // Ensure that updatedContract is a valid Contract before setting it
+        if (isValidContract(updatedContract)) {
+            setEditContract(updatedContract);
+        }
+    };
+
+    // Utility function to check if an object is a valid Contract
+    const isValidContract = (contract: Partial<Contract>): contract is Contract => {
+        return contract._id !== undefined && contract.title !== undefined && contract.location !== undefined;
+    };
+
+    const handleSaveChanges = async () => {
+        if (!selectedContract) return;
+
+        try {
+            const response = await axios.put(
+                `http://localhost:5001/api/housing-contracts/${selectedContract._id}`,
+                editContract,
+            );
+
+            setContracts((prev) =>
+                prev.map((contract) =>
+                    contract._id === selectedContract._id ? response.data : contract
+                )
+            );
+            
+            setSelectedContract(null);
+            setEditContract(null);
+        } catch (err) {
+            console.error('Error updating contract:', err);
+        }
+    };
+    
 
     return (
         <div className="max-w-4xl mx-auto mt-6 p-4">
@@ -87,9 +133,9 @@ const ContractsPage: React.FC = () => {
                         </div>
 
                         {/* Contact Info */}
-                        {contract.postedBy?.phone && (
+                        {contract.postedBy?.email && (
                             <p className="mt-2 text-blue-600 font-semibold">
-                                📞 Contact: {contract.postedBy.phone}
+                                📞 Contact: {contract.postedBy.email}
                             </p>
                         )}
                     </div>

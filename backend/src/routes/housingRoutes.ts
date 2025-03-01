@@ -94,7 +94,7 @@ router.get('/user/:userId', async (req: Request, res: Response) => {
     }
 });
 
-//Update Housing Contract
+//Update/ edit Housing Contract
 router.put('/:id', async (req: Request, res: Response) => {
     try {
         const {id} = req.params;
