@@ -12,6 +12,8 @@ import ProtectedRoute from './components/ProtectedRoute';
 import ListWithUs from './pages/ListWithUs';
 import Resources from './pages/Resources';
 import ArchitectDashboard from './pages/ArchitectDashboard';
+import "./styles/globals.css";
+
 
 const App: React.FC = () => {
   return (
