@@ -15,7 +15,7 @@ const Login:React.FC = () => {
         setLoading(true);
         try {
             await login(email, password);
-            navigate('/dashboard');
+            navigate('/home');
         } catch (err) {
             setError('Invalid email or password');
         } finally {
