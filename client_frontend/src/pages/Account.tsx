@@ -87,7 +87,7 @@ const Account: React.FC = () => {
 
                   <h2 className="text-lg font-bold mt-6">Your Listings</h2>
                   {userListings.length > 0 ? (
-                    <ul className='space-y-3'>
+                    <ul className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4'>
                         {userListings.map((listing) => (
                             <li key={listing._id} className='border p-3 rounded shadow'>
                                 <p><strong>{listing.title}</strong></p>

@@ -24,7 +24,7 @@ const app = express();
 const PORT = process.env.PORT || 5001; //PORT 5000 is being used by Mac
 
 const corsOptions = {
-    origin: ['http://localhost:3000'], // REPLACE w Frontend URL
+    origin: ['http://localhost:52763'], // REPLACE w Frontend URL
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true, //for cookies and tokens
