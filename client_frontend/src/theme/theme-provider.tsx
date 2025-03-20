@@ -8,7 +8,7 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
 
   useEffect(() => {
     setMounted(true);
-    console.log("Current Theme:", theme); // ✅ Debug theme updates
+    
   }, [theme]);
 
   if (!mounted) return <>{children}</>; // Prevents hydration issues

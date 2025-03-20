@@ -19,7 +19,7 @@ export default function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.8 }}
             >
-              Simplify Your Workflow
+              Welcome to Student Swap
             </motion.span>
             <motion.span
               className="text-foreground"
@@ -27,7 +27,6 @@ export default function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.8 }}
             >
-              with StreamLine
             </motion.span>
           </h1>
           <motion.p
