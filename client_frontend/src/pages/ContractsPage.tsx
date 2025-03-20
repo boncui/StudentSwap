@@ -58,21 +58,21 @@ const ContractsPage: React.FC = () => {
         }
     };
 
-    // const handleEditClick = (contract: Contract) => {
-    //     setSelectedContract(contract);
-    //     setEditContract(contract);
-    // };
+    const handleEditClick = (contract: Contract) => {
+        setSelectedContract(contract);
+        setEditContract(contract);
+    };
 
-    // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    //     if (!editContract) return;
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        if (!editContract) return;
 
-    //     const updatedContract = { ...editContract, [e.target.name]: e.target.value };
+        const updatedContract = { ...editContract, [e.target.name]: e.target.value };
 
-    //     // Ensure that updatedContract is a valid Contract before setting it
-    //     if (isValidContract(updatedContract)) {
-    //         setEditContract(updatedContract);
-    //     }
-    // };
+        // Ensure that updatedContract is a valid Contract before setting it
+        if (isValidContract(updatedContract)) {
+            setEditContract(updatedContract);
+        }
+    };
 
     // Utility function to check if an object is a valid Contract
     const isValidContract = (contract: Partial<Contract>): contract is Contract => {
@@ -115,8 +115,9 @@ const ContractsPage: React.FC = () => {
 
             <div className="space-y-4">
                 {contracts.map((contract) => (
-                    <div key={contract._id} className="border p-4 rounded-lg shadow">
-                        <h3 className="text-lg font-bold">{contract.title}</h3>
+                    <div key={contract._id} 
+                    className="border-2 p-4 rounded-lg border-border shadow-md rounded-lg dark:border-gray-500">
+                        <h3 className="text-lg font-bold ">{contract.title}</h3>
                         <p><strong>Rent:</strong> ${contract.monthlyRent || "Not specified"} / month</p>
                         <p><strong>Location:</strong> {contract.location}</p>
                         <p>

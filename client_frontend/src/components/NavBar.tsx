@@ -11,9 +11,8 @@ const NavBar: React.FC = () => {
   const isActive = (path: string) => (location.pathname === path ? "underline font-semibold" : "");
 
   return (
-    <header className="bg-background border-b border-border">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-4">
+    <header className="bg-background border-b border-border h-16 flex items-center">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-4">
           {/* Logo */}
           <div className="flex items-center">
             <Link to="/home" className="text-2xl font-bold text-primary">
@@ -66,7 +65,7 @@ const NavBar: React.FC = () => {
               </>
             )}
           </div>
-        </div>
+        
       </div>
     </header>
   );

@@ -166,8 +166,8 @@ const ListWithUs: React.FC = () => {
     };
 
     return (
-        <div className="max-w-2x1 mx-auto mt-8 p-6 bg-white rounded-lg shadow-lg">
-            <h2 className="text-2xl font-bold text-center mb-6">List Your Contract</h2>
+        <div className="max-w-2x1 mx-auto mt-8 p-6 rounded-lg shadow-lg">
+            <h2 className="text-2xl font-bold text-center mb-6 text-primary">List Your Contract</h2>
 
             {error && <p className="text-red-500 text-center">{error}</p>}
             {success && <p className="text-green-500 text-center">{success}</p>}
