@@ -13,6 +13,7 @@ import ListWithUs from './pages/ListWithUs';
 import Resources from './pages/Resources';
 import ArchitectDashboard from './pages/ArchitectDashboard';
 import "./styles/globals.css";
+import Layout from "./layout";
 
 
 const App: React.FC = () => {
