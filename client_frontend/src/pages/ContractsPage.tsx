@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 
 interface Contract {
     _id: string;
@@ -22,6 +23,7 @@ interface Contract {
 }
 
 const ContractsPage: React.FC = () => {
+    const { user } = useAuth();
     const [contracts, setContracts] = useState<Contract[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -59,7 +61,6 @@ const ContractsPage: React.FC = () => {
     };
 
     const handleEditClick = (contract: Contract) => {
-        setSelectedContract(contract);
         setEditContract(contract);
     };
 
@@ -73,6 +74,7 @@ const ContractsPage: React.FC = () => {
             setEditContract(updatedContract);
         }
     };
+    
 
     // Utility function to check if an object is a valid Contract
     const isValidContract = (contract: Partial<Contract>): contract is Contract => {
