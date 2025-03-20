@@ -3,7 +3,7 @@ import React from 'react';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Landing from './pages/Landing';
-import Dashboard from './pages/Dashboard';
+import Home from './pages/Home';
 import NavBar from './components/NavBar';
 import ContractsPage from './pages/ContractsPage';
 import Account from './pages/Account';
@@ -25,7 +25,7 @@ const App: React.FC = () => {
 
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/home" element={<Home />} />
             <Route path="/contracts" element={<ContractsPage />} />
             <Route path="/account" element={<Account />} />
             <Route path="/list-with-us" element={<ListWithUs />} />

@@ -15,7 +15,7 @@ const NavBar: React.FC = () => {
             <div className='flex space-x-4'>
                 {isAuthenticated && (
                     <>
-                        <Link to='/dashboard' className={`hover:underline ${isActive('/dashboard')}`}>Dashboard</Link>
+                        <Link to='/home' className={`hover:underline ${isActive('/dashboard')}`}>Home</Link>
                         <Link to='/contracts' className={`hover:underline ${isActive('/contracts')}`}>Contracts</Link>
 
                         {/* ✅ Show Architect Dashboard ONLY if user is an Architect */}
