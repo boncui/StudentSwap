@@ -68,7 +68,7 @@ const Account: React.FC = () => {
 
     try {
         await axios.delete(`http://localhost:5001/api/housing-contracts/${listingId}`);
-        setUserListings((prevListings) => prevListings.filter((listing) => listing._id != listingId));
+        setUserListings((prevListings) => prevListings.filter((listing) => listing._id !== listingId));
     } catch (error) {
         alert("Failed to delete listing. Please try again.");
     }

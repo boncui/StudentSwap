@@ -58,21 +58,21 @@ const ContractsPage: React.FC = () => {
         }
     };
 
-    const handleEditClick = (contract: Contract) => {
-        setSelectedContract(contract);
-        setEditContract(contract);
-    };
+    // const handleEditClick = (contract: Contract) => {
+    //     setSelectedContract(contract);
+    //     setEditContract(contract);
+    // };
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        if (!editContract) return;
+    // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    //     if (!editContract) return;
 
-        const updatedContract = { ...editContract, [e.target.name]: e.target.value };
+    //     const updatedContract = { ...editContract, [e.target.name]: e.target.value };
 
-        // Ensure that updatedContract is a valid Contract before setting it
-        if (isValidContract(updatedContract)) {
-            setEditContract(updatedContract);
-        }
-    };
+    //     // Ensure that updatedContract is a valid Contract before setting it
+    //     if (isValidContract(updatedContract)) {
+    //         setEditContract(updatedContract);
+    //     }
+    // };
 
     // Utility function to check if an object is a valid Contract
     const isValidContract = (contract: Partial<Contract>): contract is Contract => {
