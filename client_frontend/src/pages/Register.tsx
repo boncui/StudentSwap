@@ -25,7 +25,7 @@ const Register:React.FC = () => {
     };
 
     return (
-        <div className = "flex justify-center items-center min-h-screen bg-gray-100">
+        <div className = "flex justify-center items-center min-h-screen">
             <form
                 className= "bg-white p-6 rounded shadow-md w-80"
                 onSubmit = {handleRegister}

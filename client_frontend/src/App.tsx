@@ -20,24 +20,27 @@ const App: React.FC = () => {
   return (
     <AuthProvider>
       <Router>
-        <NavBar />
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+        
+        <Layout>
+          <NavBar />
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
 
-          {/* Protected Routes */}
-          <Route element={<ProtectedRoute />}>
-            <Route path="/home" element={<Home />} />
-            <Route path="/contracts" element={<ContractsPage />} />
-            <Route path="/account" element={<Account />} />
-            <Route path="/list-with-us" element={<ListWithUs />} />
-            {/* Architect Dashboard */}
-            <Route path="/architect-dashboard" element={<ArchitectDashboard />} />
-          </Route>
-
-          <Route path="/resources" element={<Resources />} />
-        </Routes>
+            {/* Protected Routes */}
+            <Route element={<ProtectedRoute />}>
+              <Route path="/home" element={<Home />} />
+              <Route path="/contracts" element={<ContractsPage />} />
+              <Route path="/account" element={<Account />} />
+              <Route path="/list-with-us" element={<ListWithUs />} />
+              {/* Architect Dashboard */}
+              <Route path="/architect-dashboard" element={<ArchitectDashboard />} />
+            </Route>
+            <Route path="/resources" element={<Resources />} />
+          </Routes>
+        </Layout>
+        
       </Router>
     </AuthProvider>
   );
