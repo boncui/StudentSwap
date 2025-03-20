@@ -42,7 +42,7 @@ const NavBar: React.FC = () => {
           <Link to="/login" className={`hover:underline ${isActive("/login")}`}>Login</Link>
         )}
         {/* ✅ Add Theme Toggle */}
-        <ThemeToggle />
+        <ThemeToggle />  
       </div>
     </nav>
   );

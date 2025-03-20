@@ -37,6 +37,7 @@ const App: React.FC = () => {
               {/* Architect Dashboard */}
               <Route path="/architect-dashboard" element={<ArchitectDashboard />} />
             </Route>
+            
             <Route path="/resources" element={<Resources />} />
           </Routes>
         </Layout>
