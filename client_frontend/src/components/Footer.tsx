@@ -60,17 +60,17 @@ export default function Footer() {
             <h3 className="text-sm font-semibold text-foreground tracking-wider uppercase">Legal</h3>
             <ul className="mt-4 space-y-4">
               <li>
-                <Link to="/features" className="text-base text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/home" className="text-base text-muted-foreground hover:text-foreground transition-colors">
                   Privacy
                 </Link>
               </li>
               <li>
-                <Link to="/features" className="text-base text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/home" className="text-base text-muted-foreground hover:text-foreground transition-colors">
                   Terms
                 </Link>
               </li>
               <li>
-                <Link to="/features" className="text-base text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/home" className="text-base text-muted-foreground hover:text-foreground transition-colors">
                   Cookie Policy
                 </Link>
               </li>
