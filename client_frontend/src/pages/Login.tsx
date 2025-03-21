@@ -27,15 +27,16 @@ const Login:React.FC = () => {
     return (
         <div className = "flex justify-center items-center min-h-screen">
             {/* ✅ Animated Background */}
+            
             <Animation />
 
             {/* ✅ Centered Login Form */}
 
             <form
-                className="bg-white p-6 rounded shadow-md w-80"
+                className=" p-6 rounded shadow-md w-80 z-10"
                 onSubmit={handleLogin}
             >
-                <h1 className="text-xl font-bold mb-4">Login</h1>
+                <h1 className="text-xl font-bold mb-4 ">Login</h1>
                 {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
                 <input
                     type="email"

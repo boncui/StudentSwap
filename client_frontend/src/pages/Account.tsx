@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import {useAuth} from '../context/AuthContext';
+import Animation from '../components/animation_background';
 
 //Create the interface
 interface User {

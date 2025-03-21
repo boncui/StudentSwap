@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import Animation from '../components/animation_background';
 
 interface Contract {
     _id: string;
@@ -74,7 +75,7 @@ const ContractsPage: React.FC = () => {
             setEditContract(updatedContract);
         }
     };
-    
+
 
     // Utility function to check if an object is a valid Contract
     const isValidContract = (contract: Partial<Contract>): contract is Contract => {
@@ -106,6 +107,12 @@ const ContractsPage: React.FC = () => {
 
     return (
         <div className="max-w-4xl mx-auto mt-6 p-4">
+            {/* ANIMATION */}
+            {/* <div className='z-0'>
+            <Animation />
+            </div> */}
+
+
             <h2 className="text-2xl font-bold text-center mb-4">Available Contracts</h2>
 
             {loading && <p className="text-center">Loading contract listings...</p>}

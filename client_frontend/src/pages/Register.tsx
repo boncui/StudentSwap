@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { register } from '../services/api'; 
+import Animation from '../components/animation_background';
 
 const Register:React.FC = () => {
     const [fullName, setFullName] = useState('');
@@ -26,8 +27,11 @@ const Register:React.FC = () => {
 
     return (
         <div className = "flex justify-center items-center min-h-screen">
+            {/* Animation */}
+            <Animation />
+            
             <form
-                className= "bg-white p-6 rounded shadow-md w-80"
+                className= "p-6 rounded shadow-md w-80 z-10"
                 onSubmit = {handleRegister}
             >
                 <h1 className="text-xl font-bold mb-4">Register</h1>
