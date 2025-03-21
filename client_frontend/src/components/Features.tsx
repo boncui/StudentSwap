@@ -8,13 +8,13 @@ const features = [
     icon: Zap,
   },
   {
-    name: "Intuitive Interface",
+    name: "Intuitive User-Interface",
     description: "A user-friendly interface that's easy to navigate, making your work more efficient.",
     icon: Layers,
   },
   {
-    name: "Team Collaboration",
-    description: "Seamlessly work together with your team members in real-time.",
+    name: "AI tools",
+    description: "Utilize AI-powered tools to streamline your contract listings.",
     icon: Users,
   },
   {
@@ -64,7 +64,7 @@ export default function Features() {
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
           >
-            Features
+            StudentSwap Features
           </motion.h2>
           <motion.p
             className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-foreground sm:text-4xl"
@@ -73,7 +73,7 @@ export default function Features() {
             transition={{ duration: 0.5, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            Everything you need to streamline your workflow
+            Everything you need for an optimal experience
           </motion.p>
           <motion.p
             className="mt-4 max-w-2xl text-xl text-muted-foreground lg:mx-auto"
@@ -82,8 +82,8 @@ export default function Features() {
             transition={{ duration: 0.5, delay: 0.4 }}
             viewport={{ once: true }}
           >
-            StreamLine offers a comprehensive set of features designed to boost your productivity and simplify your
-            business processes.
+            StudentSwap offers a comprehensive set of features designed to smoothen and simplify your
+            student subleasing processes.
           </motion.p>
         </div>
 
