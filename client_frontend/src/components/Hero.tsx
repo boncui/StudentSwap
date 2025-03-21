@@ -35,8 +35,7 @@ export default function Hero() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.8 }}
           >
-            Boost productivity and streamline your business processes with our powerful SaaS platform. Designed for
-            teams of all sizes.
+            Find feasible student housing options, streamlined by AI-tools.
           </motion.p>
           <motion.div
             className="mt-10 flex flex-col sm:flex-row gap-4 justify-center"
