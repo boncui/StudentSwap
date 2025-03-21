@@ -107,11 +107,6 @@ const ContractsPage: React.FC = () => {
 
     return (
         <div className="max-w-4xl mx-auto mt-6 p-4">
-            {/* ANIMATION */}
-            {/* <div className='z-0'>
-            <Animation />
-            </div> */}
-
 
             <h2 className="text-2xl font-bold text-center mb-4">Available Contracts</h2>
 

@@ -87,7 +87,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.get('/user/:userId', async (req: Request, res: Response) => {
     try {
         const { userId } = req.params;
-        const contracts = await HousingContract.find({ postedBy: userId });
+        const contracts = await HousingContract.find({ postedBy: userId }).populate('postedBy', '_id');
         res.status(200).json(contracts);
     } catch (error) {
         res.status(500).json({ error: "Failed to fetch user's contracts." });
