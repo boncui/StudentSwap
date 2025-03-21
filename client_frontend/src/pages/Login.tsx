@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useAuth} from '../context/AuthContext';
+import Animation from "../components/animation_background";
 
 const Login:React.FC = () => {
     const { login } = useAuth();
@@ -25,6 +26,11 @@ const Login:React.FC = () => {
 
     return (
         <div className = "flex justify-center items-center min-h-screen">
+            {/* ✅ Animated Background */}
+            <Animation />
+
+            {/* ✅ Centered Login Form */}
+
             <form
                 className="bg-white p-6 rounded shadow-md w-80"
                 onSubmit={handleLogin}

@@ -16,11 +16,6 @@ export default function Footer() {
               </li>
               <li>
                 <Link to="/features" className="text-base text-muted-foreground hover:text-foreground transition-colors">
-                  Pricing
-                </Link>
-              </li>
-              <li>
-                <Link to="/features" className="text-base text-muted-foreground hover:text-foreground transition-colors">
                   Integrations
                 </Link>
               </li>
