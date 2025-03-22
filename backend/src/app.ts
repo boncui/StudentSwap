@@ -21,7 +21,7 @@ mongoose.connect(process.env.MONGO_URI!)
 
 
 const app = express();
-const PORT = process.env.PORT || 5001; //PORT 5000 is being used by Mac
+const PORT = process.env.PORT || 5001; 
 
 const corsOptions = {
     origin: [
