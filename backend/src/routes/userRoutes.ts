@@ -166,4 +166,52 @@ router.delete('/:id', authenticate, async (req: Request, res: Response) => {
     }
 });
 
+
+router.post('/:userId/liked-listings', async (req, res) => {
+    const { userId } = req.params;
+    const { listingId } = req.body;
+    try {
+      const user = await User.findById(userId);
+      if (!user) return res.status(404).send("User not found");
+  
+      if (!user.likedListings.includes(listingId)) {
+        user.likedListings.push(listingId);
+        await user.save();
+      }
+  
+      res.status(200).send("Liked");
+    } catch (err) {
+      res.status(500).send("Error liking listing");
+    }
+  });
+  
+  router.delete('/:userId/liked-listings', async (req, res) => {
+    const { userId } = req.params;
+    const { listingId } = req.body;
+    try {
+      const user = await User.findById(userId);
+      if (!user) return res.status(404).send("User not found");
+  
+      user.likedListings = user.likedListings.filter(id => id.toString() !== listingId);
+      await user.save();
+  
+      res.status(200).send("Unliked");
+    } catch (err) {
+      res.status(500).send("Error unliking listing");
+    }
+  });
+  
+  router.get('/:userId/liked-listings', async (req, res) => {
+    const { userId } = req.params;
+    try {
+      const user = await User.findById(userId).populate('likedListings');
+      if (!user) return res.status(404).send("User not found");
+  
+      res.status(200).json(user.likedListings); // ✅ Return full contract objects
+    } catch (err) {
+      res.status(500).send("Error fetching liked listings");
+    }
+  });
+  
+
 export default router;

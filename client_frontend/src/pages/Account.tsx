@@ -18,6 +18,7 @@ const Account: React.FC = () => {
     const [userData, setUserData] = useState<any>(null);
     const [userListings, setUserListings] = useState<any[]>([]);
     const [editListing, setEditListing] = useState<any | null>(null);
+    const [likedListings, setLikedListings] = useState<any[]>([]);
 
   
     useEffect(() => {
@@ -45,6 +46,22 @@ const Account: React.FC = () => {
       };
 
       fetchUserData();
+  }, [user]);
+
+  // Fetch liked listings on user load
+  useEffect(() => {
+    const fetchLikedListings = async () => {
+        if (!user) return;
+
+        try {
+            const response = await axios.get(`http://localhost:5001/api/users/${user._id}/liked-listings`);
+            setLikedListings(response.data);
+        } catch (err) {
+            console.error("Failed to fetch liked listings.");
+        }
+    };
+
+    fetchLikedListings();
   }, [user]);
 
   
@@ -205,7 +222,25 @@ const Account: React.FC = () => {
           ) : (
             <p className="text-gray-500">You have not created a listing yet.</p>
           )}
+          
+          <h2 className="text-lg font-bold mt-6">Liked Listings</h2>
+          {likedListings.length > 0 ? (
+            <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {likedListings.map((listing) => (
+                <li key={listing._id} className="border p-3 rounded shadow">
+                  <p><strong>{listing.title}</strong></p>
+                  <p>${listing.monthlyRent} / month</p>
+                  <p><strong>Location:</strong> {listing.location}</p>
+                  <p className="text-sm text-gray-500">{listing.description}</p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-gray-500">You haven't liked any listings yet.</p>
+          )}
 
+          
+          {/* Delete Account */}
           <button
             onClick={handleDeleteAccount}
             className="mt-6 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"

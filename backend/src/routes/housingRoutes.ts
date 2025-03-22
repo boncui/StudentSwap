@@ -49,6 +49,7 @@ router.get('/', async (req: Request, res: Response) => {
         const skip = (pageNumber - 1) * pageSize;
 
         const contracts = await HousingContract.find(filter)
+            .populate('postedBy', 'email')
             .skip(skip)
             .limit(pageSize);
 

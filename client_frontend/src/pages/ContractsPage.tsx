@@ -31,7 +31,9 @@ const ContractsPage: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [selectedContract, setSelectedContract] = useState<Contract | null>(null);
-    const [editContract, setEditContract] = useState<Contract | null>(null);
+    const [revealedEmails, setRevealedEmails] = useState<{ [contractId: string]: boolean }>({});
+    const [likedListings, setLikedListings] = useState<string[]>([]);
+
     
     const fetchContracts = async (page: number) => {
         setLoading(true);
@@ -55,54 +57,56 @@ const ContractsPage: React.FC = () => {
         fetchContracts(currentPage);
     }, [currentPage]);
 
+    useEffect(() => {
+        if (user) {
+            axios.get(`http://localhost:5001/api/users/${user._id}/liked-listings`)
+                .then(res => setLikedListings(res.data || []))
+                .catch(() => setLikedListings([]));
+        }
+    }, [user]);
+
     const handlePageChange = (newPage: number) => {
         if (newPage >= 1 && newPage <= totalPages) {
             setCurrentPage(newPage);
         }
     };
 
-    const handleEditClick = (contract: Contract) => {
-        setEditContract(contract);
-    };
+    const handleRevealEmail = (contractId: string) => {
+        setRevealedEmails(prev => ({ ...prev, [contractId]: true }));
+    
+        setTimeout(() => {
+            setRevealedEmails(prev => {
+              const updated = { ...prev };
+              delete updated[contractId];
+              return updated;
+            });
+          }, 5000);
+        };
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        if (!editContract) return;
-
-        const updatedContract = { ...editContract, [e.target.name]: e.target.value };
-
-        // Ensure that updatedContract is a valid Contract before setting it
-        if (isValidContract(updatedContract)) {
-            setEditContract(updatedContract);
-        }
-    };
-
-
-    // Utility function to check if an object is a valid Contract
-    const isValidContract = (contract: Partial<Contract>): contract is Contract => {
-        return contract._id !== undefined && contract.title !== undefined && contract.location !== undefined;
-    };
-
-    const handleSaveChanges = async () => {
-        if (!selectedContract) return;
-
+          
+    const toggleLike = async (listingId: string) => {
         try {
-            const response = await axios.put(
-                `http://localhost:5001/api/housing-contracts/${selectedContract._id}`,
-                editContract,
+            const stringId = listingId.toString();
+            const isLiked = likedListings.includes(stringId);
+            const url = `http://localhost:5001/api/users/${user._id}/liked-listings`;
+            const method = isLiked ? 'delete' : 'post';
+        
+            await axios({
+            method,
+            url,
+            data: { listingId: stringId },
+            });
+        
+            setLikedListings(prev =>
+            isLiked ? prev.filter(id => id !== stringId) : [...prev, stringId]
             );
-
-            setContracts((prev) =>
-                prev.map((contract) =>
-                    contract._id === selectedContract._id ? response.data : contract
-                )
-            );
-            
-            setSelectedContract(null);
-            setEditContract(null);
         } catch (err) {
-            console.error('Error updating contract:', err);
+            console.error('Error updating like status', err);
         }
-    };
+        };
+          
+
+
     
 
     return (
@@ -121,14 +125,28 @@ const ContractsPage: React.FC = () => {
                 {contracts.map((contract) => (
                     <div key={contract._id} 
                     className="border-2 p-4 rounded-lg border-border shadow-md rounded-lg dark:border-gray-500">
-                        <h3 className="text-lg font-bold ">{contract.title}</h3>
+                        
+                        <div className="flex justify-between items-start">
+                        <h3 className="text-lg font-bold">{contract.title}</h3>
+                        <button
+                        className={`text-2xl transition ${
+                            likedListings.includes(contract._id.toString()) ? 'text-pink-500' : 'text-gray-300'
+                        }`}
+                        onClick={() => toggleLike(contract._id)}
+                        >
+                        ♥
+                        </button>
+
+                        </div>
+
                         <p><strong>Rent:</strong> ${contract.monthlyRent || "Not specified"} / month</p>
                         <p><strong>Location:</strong> {contract.location}</p>
                         <p>
                             <strong>Rooms:</strong> {contract.rooms}, <strong>Baths:</strong> {contract.baths}
                         </p>
                         {contract.description && <p className="text-sm text-gray-600">{contract.description}</p>}
-                        
+
+
                         {/* Features */}
                         <div className="text-sm mt-2">
                             {contract.features?.furnished && <p>🏡 Furnished</p>}
@@ -138,11 +156,18 @@ const ContractsPage: React.FC = () => {
                         </div>
 
                         {/* Contact Info */}
-                        {contract.postedBy?.email && (
-                            <p className="mt-2 text-blue-600 font-semibold">
-                                📞 Contact: {contract.postedBy.email}
-                            </p>
+                        <div className="mt-4">
+                        {revealedEmails[contract._id] ? (
+                            <p className="text-blue-600 font-semibold">📞 Contact: {contract.postedBy?.email}</p>
+                        ) : (
+                            <button
+                            onClick={() => handleRevealEmail(contract._id)}
+                            className="bg-primary text-white px-3 py-1 rounded hover:bg-primary/80 transition"
+                            >
+                            Contact
+                            </button>
                         )}
+                        </div>
                     </div>
                 ))}
             </div>
