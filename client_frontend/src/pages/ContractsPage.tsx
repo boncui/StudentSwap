@@ -60,8 +60,13 @@ const ContractsPage: React.FC = () => {
     useEffect(() => {
         if (user) {
             axios.get(`http://localhost:5001/api/users/${user._id}/liked-listings`)
-                .then(res => setLikedListings(res.data || []))
-                .catch(() => setLikedListings([]));
+            .then(res => {
+                const ids = res.data.map((listing: any) =>
+                typeof listing === 'string' ? listing : listing._id.toString()
+                );
+                setLikedListings(ids);
+            })
+            .catch(() => setLikedListings([]));
         }
     }, [user]);
 
