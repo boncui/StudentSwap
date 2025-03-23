@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
-import Animation from '../components/animation_background';
+
+
+// Use environment variable as base URL; fallback to localhost
+const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
+// ${baseURL}
 
 interface Contract {
     _id: string;
@@ -39,7 +43,7 @@ const ContractsPage: React.FC = () => {
         setLoading(true);
         setError('');
         try {
-            const response = await axios.get('http://localhost:5001/api/housing-contracts', {
+            const response = await axios.get(`${baseURL}/api/housing-contracts`, {
                 params: { page, limit: 7 }, // Fetch 6 contracts per page
             });
 
@@ -59,7 +63,7 @@ const ContractsPage: React.FC = () => {
 
     useEffect(() => {
         if (user) {
-            axios.get(`http://localhost:5001/api/users/${user._id}/liked-listings`)
+            axios.get(`${baseURL}/api/users/${user._id}/liked-listings`)
             .then(res => {
                 const ids = res.data.map((listing: any) =>
                 typeof listing === 'string' ? listing : listing._id.toString()
@@ -93,7 +97,7 @@ const ContractsPage: React.FC = () => {
         try {
             const stringId = listingId.toString();
             const isLiked = likedListings.includes(stringId);
-            const url = `http://localhost:5001/api/users/${user._id}/liked-listings`;
+            const url = `${baseURL}/api/users/${user._id}/liked-listings`;
             const method = isLiked ? 'delete' : 'post';
         
             await axios({

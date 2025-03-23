@@ -11,6 +11,9 @@ interface User {
     likedListings: Array<{id: string; title: string;}>
 }
 
+// Use environment variable as base URL; fallback to localhost
+const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
+
 const Account: React.FC = () => {
     const { user, logout } = useAuth();  
     const [loading, setLoading] = useState(true);
@@ -31,11 +34,11 @@ const Account: React.FC = () => {
 
           try {
             //Fetch user details
-            const userResponse = await axios.get(`http://localhost:5001/api/users/${user._id}`);
+            const userResponse = await axios.get(`${baseURL}/api/users/${user._id}`);
             setUserData(userResponse.data);
 
             //Fetch user's Listings
-            const listingResponse = await axios.get(`http://localhost:5001/api/housing-contracts/user/${user._id}`);
+            const listingResponse = await axios.get(`${baseURL}/api/housing-contracts/user/${user._id}`);
             setUserListings(listingResponse.data);
 
           } catch (err) {
@@ -54,7 +57,7 @@ const Account: React.FC = () => {
         if (!user) return;
 
         try {
-            const response = await axios.get(`http://localhost:5001/api/users/${user._id}/liked-listings`);
+            const response = await axios.get(`${baseURL}/api/users/${user._id}/liked-listings`);
             setLikedListings(response.data);
         } catch (err) {
             console.error("Failed to fetch liked listings.");
@@ -73,9 +76,9 @@ const Account: React.FC = () => {
 
       if (confirmDelete) {
           try {
-              await axios.delete(`http://localhost:5001/api/users/${user._id}`);
+              await axios.delete(`${baseURL}/api/users/${user._id}`);
               alert('Your account has been deleted successfully.');
-              logout(); // ✅ Use logout() from useAuth() to clear state and localStorage
+              logout(); 
           } catch (err) {
               alert('Failed to delete account. Please try again.');
           }
@@ -87,7 +90,7 @@ const Account: React.FC = () => {
     if (!confirmDelete) return;
 
     try {
-        await axios.delete(`http://localhost:5001/api/housing-contracts/${listingId}`);
+        await axios.delete(`${baseURL}/api/housing-contracts/${listingId}`);
         setUserListings((prevListings) => prevListings.filter((listing) => listing._id !== listingId));
     } catch (error) {
         alert("Failed to delete listing. Please try again.");
@@ -115,7 +118,7 @@ const Account: React.FC = () => {
 
     try {
         const response = await axios.put(
-            `http://localhost:5001/api/housing-contracts/${editListing._id}`,
+            `${baseURL}/api/housing-contracts/${editListing._id}`,
             editListing
           );
     
@@ -190,7 +193,7 @@ const Account: React.FC = () => {
                         </button>
                     </div>
                     ) : (
-                    // ✅ Wrap with Fragment to resolve TS error
+                    
                     <>
                         <p><strong>{listing.title}</strong></p>
                         <p>${listing.monthlyRent} / month</p>

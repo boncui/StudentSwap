@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { ThemeToggle } from "../theme/theme-toggle";
-import { Button } from "../components/ui/button"; // ✅ Adjust import paths
+import { Button } from "../components/ui/button";
 
 const NavBar: React.FC = () => {
   const { isAuthenticated, logout, user } = useAuth();

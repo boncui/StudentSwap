@@ -1,6 +1,10 @@
 import React, {useState} from 'react';
 import axios from 'axios';
 
+// Use environment variable as base URL; fallback to localhost
+const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
+// ${baseURL}
+
 const Resources: React.FC = () => {
     const [formData, setFormData] = useState({
         name: "",
@@ -24,7 +28,7 @@ const Resources: React.FC = () => {
         setSuccess(null);
 
         try {
-            await axios.post("http://localhost:5001/api/suggestion", formData);
+            await axios.post(`${baseURL}/api/suggestion`, formData);
             setSuccess("Thank You! Your feedback has been sent!");
             setFormData({ name: "", email: "", message: ""}); //Reset the Form
         } catch (err) {

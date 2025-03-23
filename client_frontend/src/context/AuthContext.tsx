@@ -1,12 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
-//LEt's define the user
-interface User {
-    _id: string;
-    fullName: string;
-    email: string;
-}
 
 //Defined AuthContext Type
 interface AuthContextType {
@@ -18,6 +12,9 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+// Use environment variable as base URL; fallback to localhost
+const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<any>(null);
@@ -34,7 +31,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             }
             
             try {
-                const response = await axios.get('http://localhost:5001/api/users/me', {
+                const response = await axios.get(`${baseURL}/api/users/me`, {
                     headers: { Authorization: `Bearer ${token}`},
                 });
 
@@ -52,7 +49,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const login = async (email: string, password: string) => {
         try {
-            const response = await axios.post('http://localhost:5001/api/users/login', { email, password });
+            const response = await axios.post(`${baseURL}/api/users/login`, { email, password });
             const { token, user } = response.data;
 
             localStorage.setItem('token', token);

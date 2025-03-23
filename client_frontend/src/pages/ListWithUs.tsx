@@ -3,6 +3,10 @@ import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
+// Use environment variable as base URL; fallback to localhost
+const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
+// ${baseURL}
+
 const ListWithUs: React.FC = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
@@ -120,7 +124,7 @@ const ListWithUs: React.FC = () => {
         console.log("Submitting form data:", formData.features);
 
         try {
-            await axios.post("http://localhost:5001/api/housing-contracts/create", formattedData, {
+            await axios.post(`${baseURL}/api/housing-contracts/create`, formattedData, {
                 headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
             });
 

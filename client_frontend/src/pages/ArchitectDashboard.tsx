@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
+// Use environment variable as base URL; fallback to localhost
+const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
+
 const ArchitectDashboard = () => {
     const { user, token } = useAuth();
     const navigate = useNavigate();
@@ -17,7 +20,7 @@ const ArchitectDashboard = () => {
         
         const fetchSuggestions = async () => {
             try {
-                const response = await fetch('http://localhost:5001/api/suggestions', {
+                const response = await fetch(`${baseURL}/api/suggestions`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
