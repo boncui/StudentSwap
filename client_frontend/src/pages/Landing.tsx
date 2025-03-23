@@ -1,11 +1,15 @@
 import React from 'react';
 import {useNavigate} from 'react-router-dom';
+import Animation from "../components/animation_background";
 
 const Landing:React.FC = () => {
     const navigate = useNavigate();
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen">
+            {/* ✅ Animated Background */}
+            <Animation />
+            {/* ✅ Centered Login Form */}
             <div className="text-center">
                 <h1 className="text-3xl font-bold mb-8">Welcome to Student Swap</h1>
                 <h2>Please create an account to use the webapp</h2>
