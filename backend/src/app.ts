@@ -29,9 +29,9 @@ const corsOptions = {
     //     'https://student-swap.vercel.app',
     //     'https://student-swap-qy0dzbwk4-dcui-boncui.vercel.app'
     // ],
-    
-    // origin: ['https://student-swap.vercel.app'],
-    origin: '*',
+
+    origin: ['https://student-swap.vercel.app'],
+    // origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true, //for cookies and tokens
