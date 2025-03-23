@@ -1,6 +1,6 @@
 import express, {Request, Response} from 'express';
 import Suggestion from '../models/Suggestion';
-import { authenticate, authorizeArchitect, AuthenticatedRequest } from '../middleware/authMiddleware';
+import authenticate, { authorizeArchitect, AuthenticatedRequest } from '../middleware/authMiddleware';
 
 
 const router = express.Router();

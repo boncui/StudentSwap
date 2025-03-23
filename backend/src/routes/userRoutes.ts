@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response, Router } from 'express';
 import { check, validationResult } from 'express-validator';
-import { authenticate, AuthenticatedRequest } from '../middleware/authMiddleware';
+import authenticate, { AuthenticatedRequest } from '../middleware/authMiddleware';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import User from '../models/User';
