@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-const API  = axios.create({
-    baseURL: 'http://localhost:5001/api',
-});
+const API = axios.create({
+    baseURL: `${process.env.REACT_APP_API_URL || 'http://localhost:5001'}/api`,
+  });  
 
 //LOGIN
 export const login = async (email: string, password: string) => {
