@@ -26,8 +26,9 @@ const PORT = process.env.PORT || 5001;
 const corsOptions = {
     origin: [
         'http://localhost:3001', // local dev
-        'https://studentswap.vercel.app' // live frontend
-    ], // REPLACE w Frontend URL
+        'https://studentswap.vercel.app', // live frontend
+        'https://student-swap-qy0dzbwk4-dcui-boncui.vercel.app'
+    ], 
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true, //for cookies and tokens
