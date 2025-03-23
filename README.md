@@ -51,7 +51,4 @@ While StudentSwap currently runs without AI, we’re laying the groundwork for f
 - TypeScript
 - MongoDB Atlas
 
----
-
-## 📂 Project Structure
 
